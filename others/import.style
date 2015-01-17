@@ -12,17 +12,29 @@ node,way	addr:housenumber	text	linear
 node,way	addr:suburb	text	linear
 node,way	addr:place	text	linear
 node,way	addr:hamlet	text	linear
+# source fields (same as the upper fields with prefix source)
+node,way	source:addr:country	text	linear
+node,way	source:addr:city	text	linear
+node,way	source:addr:postcode	text	linear
+node,way	source:addr:street	text	linear
+node,way	source:addr:housename	text	linear
+node,way	source:addr:housenumber	text	linear
+node,way	source:addr:suburb	text	linear
+node,way	source:addr:place	text	linear
+node,way	source:addr:hamlet	text	linear
 
 # For boundaries
-node,way	admin_level	text	linear
-
-# For roads
-node,way	highway	text	linear
-node,way	name	text	linear
-node,way	tunnel	text	linear
+way	admin_level	text	linear
+way	ISO3166-1	text	linear
 
 # For places
 node,way	place	text	linear
+node,way	population	text	linear
+node,way	name	text	linear
 
 # For postalcodes
-way	postcode	text	linear
+way	postal_code	text	linear
+
+# For roads
+way	highway	text	linear
+way	tunnel	text	linear
