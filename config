@@ -1,0 +1,10 @@
+# configuration
+
+import_file=import.osm.pbf
+username=osm
+password=osm
+database=osm
+pghost=127.0.0.1
+
+o2pProcesses=4
+o2pCache=1500MB

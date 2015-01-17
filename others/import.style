@@ -1,0 +1,28 @@
+# This is the osm2pgsql .style file for osm_address_db import.
+
+# OsmType  Tag          DataType     Flags
+
+# For addresses
+node,way	addr:country	text	linear
+node,way	addr:city	text	linear
+node,way	addr:postcode	text	linear
+node,way	addr:street	text	linear
+node,way	addr:housename	text	linear
+node,way	addr:housenumber	text	linear
+node,way	addr:suburb	text	linear
+node,way	addr:place	text	linear
+node,way	addr:hamlet	text	linear
+
+# For boundaries
+node,way	admin_level	text	linear
+
+# For roads
+node,way	highway	text	linear
+node,way	name	text	linear
+node,way	tunnel	text	linear
+
+# For places
+node,way	place	text	linear
+
+# For postalcodes
+way	postcode	text	linear
