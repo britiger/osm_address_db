@@ -1,0 +1,8 @@
+# This is the osm2pgsql .style file for osm_address_db import.
+
+# OsmType  Tag          DataType     Flags
+
+# For boundaries
+way	admin_level	text	polygon
+way	ISO3166-1	text	polygon
+way,node	name	text	polygon

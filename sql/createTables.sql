@@ -13,7 +13,7 @@ CREATE SCHEMA import;
 SELECT osm_id, name, admin_level, "ISO3166-1", ST_Union(geometry) AS geometry, max(last_update) AS last_update
 INTO import.osm_admin_2
 FROM osm_admin
-WHERE admin_level = 2
+WHERE admin_level = 2 AND "ISO3166-1" IS NOT NULL
 GROUP BY osm_id, name, admin_level, "ISO3166-1";
 
 -- Level 4 - State / Bundesland
@@ -57,5 +57,19 @@ INTO import.osm_places
 FROM osm_places
 GROUP BY osm_id, class, name, type, population;
 
+-- osm_roads
+SELECT * 
+INTO import.osm_roads
+FROM osm_roads;
+
 -- osm_addresses
+SELECT osm_id, class,
+	"addr:country", "addr:city", "addr:postcode", "addr:street", "addr:housename", "addr:housenumber", "addr:suburb", "addr:place", "addr:hamlet",
+	"source:addr:country", "source:addr:city", "source:addr:postcode", "source:addr:street", "source:addr:housename", "source:addr:housenumber", "source:addr:suburb", "source:addr:place", "source:addr:hamlet",
+	ST_Union(geometry) AS geometry, max(last_update) AS last_update
+INTO import.osm_addresses
+FROM osm_addresses
+GROUP BY osm_id, class,
+	"addr:country", "addr:city", "addr:postcode", "addr:street", "addr:housename", "addr:housenumber", "addr:suburb", "addr:place", "addr:hamlet",
+	"source:addr:country", "source:addr:city", "source:addr:postcode", "source:addr:street", "source:addr:housename", "source:addr:housenumber", "source:addr:suburb", "source:addr:place", "source:addr:hamlet";
 

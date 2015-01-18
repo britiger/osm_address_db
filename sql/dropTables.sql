@@ -2,6 +2,9 @@
 SET client_min_messages TO WARNING;
 
 -- DROP all existing tables
+-- config
+DROP TABLE IF EXISTS config_values CASCADE;
+
 -- Delete-tables 
 DROP TABLE IF EXISTS delete_line CASCADE;
 DROP TABLE IF EXISTS delete_nodes CASCADE;

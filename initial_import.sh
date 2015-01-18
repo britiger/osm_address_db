@@ -25,10 +25,22 @@ psql "dbname=$database host=$pghost user=$username password=$password port=5432"
 echo Creating delete triggers ...
 psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createDeleteTriggers.sql > /dev/null
 
+# create functions
+echo Creating functions ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createFunctions.sql > /dev/null
+
 # create view for later processing
-echo Creating Import views ...
+echo Creating import views ...
 psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createImportViews.sql > /dev/null
 
 # create Tables for Initial import-schema
 echo Creating import tables ...
 psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createTables.sql > /dev/null
+
+# create Index for Initial import-schema
+echo Creating indexes on import tables ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createIndex.sql > /dev/null
+
+# create Views for Initial import-schema
+echo Creating views on import tables ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createView.sql > /dev/null

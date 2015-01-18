@@ -40,3 +40,18 @@ CREATE OR REPLACE VIEW osm_addresses AS
 		way AS geometry, last_update 
 	FROM planet_osm_point
 	WHERE "addr:housenumber" IS NOT NULL;
+
+-- osm_associated (view for accociated streets)
+CREATE OR REPLACE VIEW osm_associated AS
+	SELECT id*-1 AS osm_id, getValueOf('name',tags) AS name,
+		getMembersRoleType('house', 'polygon', members) AS house_polygon,
+		getMembersRoleType('house', 'point', members) AS house_point,
+		getMemberRoleType('street', 'way', members) AS street,
+		last_update
+	FROM planet_osm_rels WHERE 'associatedStreet' = ANY(tags);
+
+-- osm_roads
+CREATE OR REPLACE VIEW osm_roads AS
+	SELECT osm_id, name, highway, way AS geometry, last_update
+	FROM planet_osm_line
+	WHERE name IS NOT NULL AND highway IS NOT NULL;
