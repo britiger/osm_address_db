@@ -7,17 +7,18 @@ SET client_min_messages TO WARNING;
 CREATE OR REPLACE VIEW osm_admin AS
 	SELECT osm_id, name, admin_level::integer, "ISO3166-1", way AS geometry, last_update
 	FROM planet_osm_polygon
-	WHERE admin_level IN('1','2','3','4','5','6','7','8','9','10','11','12','13');
+	WHERE admin_level IN('1','2','3','4','5','6','7','8','9','10','11','12','13')
+		AND name IS NOT NULL;
 
 -- osm_places
 CREATE OR REPLACE VIEW osm_places AS
 	SELECT osm_id, 'polygon' AS class, name, place AS "type", population, way AS geometry, last_update
 	FROM planet_osm_polygon
-	WHERE place IS NOT NULL
+	WHERE place IS NOT NULL AND name IS NOT NULL
 		UNION
 	SELECT osm_id, 'point' AS class, name, place AS "type", population, way AS geometry, last_update
-	FROM planet_osm_point
-	WHERE place IS NOT NULL;
+	FROM planet_osm_point  
+	WHERE place IS NOT NULL AND name IS NOT NULL;
 
 -- osm_postcodes
 CREATE OR REPLACE VIEW osm_postcode AS
