@@ -19,3 +19,6 @@ do
 	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/copyCountry.sql > /dev/null
 done
 
+# update materilized views
+echo Update views ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateMatViews.sql > /dev/null

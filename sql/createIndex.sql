@@ -1,6 +1,7 @@
 -- ignore NOTICE
 SET client_min_messages TO WARNING;
 
+-- TABLEs
 CREATE INDEX osm_roads_geom ON import.osm_roads USING gist (geometry);
 CREATE INDEX osm_roads_osm_id_idx ON import.osm_roads USING btree (osm_id);
 
@@ -27,3 +28,5 @@ CREATE INDEX osm_admin_8_osm_id_idx ON import.osm_admin_8 USING btree (osm_id);
 
 CREATE INDEX osm_admin_9_up_geom ON import.osm_admin_9_up USING gist (geometry);
 CREATE INDEX osm_admin_9_up_osm_id_idx ON import.osm_admin_9_up USING btree (osm_id);
+
+CREATE INDEX osm_addresses_addr_street_idx ON import.osm_addresses ("addr:street");

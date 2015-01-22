@@ -2,8 +2,7 @@
 SET client_min_messages TO WARNING;
 
 -- Drop old views
-DROP VIEW IF EXISTS import.city_list CASCADE;
-DROP VIEW IF EXISTS import.osm_addr CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS import.city_list CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_suburb CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_postcode CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.country_state CASCADE;
@@ -40,6 +39,9 @@ FROM import.osm_admin_8 AS city,
 import.osm_admin_6 AS county
 WHERE ST_WITHIN(city.geometry, county.geometry);
 
+CREATE INDEX county_city_county_osm_id_idx ON import.county_city (county_osm_id);
+CREATE INDEX county_city_city_osm_id_idx ON import.county_city (city_osm_id);
+
 -- All county within a state
 CREATE MATERIALIZED VIEW import.state_county
 AS SELECT
@@ -52,6 +54,9 @@ county.geometry
 FROM import.osm_admin_4 AS state, 
 import.osm_admin_6 AS county
 WHERE ST_WITHIN(county.geometry, state.geometry);
+
+CREATE INDEX state_county_state_osm_id_idx ON import.state_county (state_osm_id);
+CREATE INDEX state_county_county_osm_id_idx ON import.state_county (county_osm_id);
 
 -- All states within a country
 CREATE MATERIALIZED VIEW import.country_state
@@ -68,13 +73,19 @@ FROM import.osm_admin_4 AS state,
 import.osm_admin_2 AS country 
 WHERE ST_WITHIN(state.geometry, country.geometry);
 
+CREATE INDEX country_state_country_osm_id_idx ON import.country_state (country_osm_id);
+CREATE INDEX country_state_state_osm_id_idx ON import.country_state (state_osm_id);
+
 -- List of all Cities
-CREATE VIEW import.city_list
+CREATE MATERIALIZED VIEW import.city_list
 AS SELECT state_name AS city_name, state_osm_id AS city_osm_id, 'state' AS city_type, geometry FROM import.country_state WHERE sub_count_county=0 AND sub_count_city=0
 UNION
 SELECT county_name AS city_name, county_osm_id AS city_osm_id, 'county' AS city_type, geometry FROM import.state_county WHERE sub_count=0
 UNION 
 SELECT city_name, city_osm_id, 'city' AS city_type, geometry FROM import.county_city;
+
+CREATE INDEX city_list_geom ON import.city_list USING gist(geometry);
+CREATE INDEX city_list_city_osm_id ON import.city_list (city_osm_id);
 
 -- All postcodes within an state/county/city
 CREATE MATERIALIZED VIEW import.city_postcode
@@ -102,11 +113,17 @@ WHERE ST_WITHIN(suburb.geometry, city_list.geometry);
 
 -- All Roads within an city
 CREATE MATERIALIZED VIEW import.city_roads
-AS SELECT road.name as road_name, city_osm_id, road.osm_id as road_osm_id
-FROM import.osm_roads as road, import.city_list
-WHERE ST_INTERSECTS(road.geometry, city_list.geometry);
+AS SELECT 
+road.name as road_name, 
+city_osm_id, 
+string_agg(road.osm_id::text, ',') as road_osm_ids
+FROM import.osm_roads as road, 
+import.city_list
+WHERE ST_INTERSECTS(road.geometry, city_list.geometry)
+GROUP BY road_name, city_osm_id;
 
 CREATE INDEX city_roads_idx_city ON import.city_roads USING btree (city_osm_id);
+CREATE INDEX city_roads_road_name ON import.city_roads (road_name);
 
 -- All Places within an city
 CREATE MATERIALIZED VIEW import.city_places
@@ -127,7 +144,3 @@ WHERE a.osm_id<b.osm_id
   AND a."addr:suburb" = b."addr:suburb"
   AND a."addr:street" = b."addr:street"
   AND a."addr:housenumber" = b."addr:housenumber";
-
--- Dummy View for osm_addresses
-CREATE OR REPLACE VIEW import.osm_addr AS 
-SELECT * FROM osm_addresses;
