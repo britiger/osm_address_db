@@ -1,4 +1,4 @@
-﻿-- ignore NOTICE
+-- ignore NOTICE
 SET client_min_messages TO WARNING;
 
 -- Drop old views
