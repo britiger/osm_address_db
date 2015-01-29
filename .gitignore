@@ -1,3 +1,5 @@
 *~
 *.pbf
+*.bz2
 *.osm
+config
