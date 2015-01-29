@@ -52,7 +52,9 @@ WHERE postal_code IS NOT NULL
 GROUP BY osm_id, postal_code;
 
 -- osm_places
-SELECT osm_id, class, name, type, population::integer, ST_Union(geometry) AS geometry, max(last_update) AS last_update
+SELECT osm_id, class, name, type, 
+CASE WHEN population~E'^\\d+$' THEN population::bigint ELSE NULL::bigint END AS population,
+ST_Union(geometry) AS geometry, max(last_update) AS last_update
 INTO import.osm_places
 FROM osm_places
 GROUP BY osm_id, class, name, type, population;
