@@ -67,11 +67,11 @@ FROM osm_roads;
 -- osm_addresses
 SELECT osm_id, class,
 	"addr:country", "addr:city", "addr:postcode", "addr:street", "addr:housename", "addr:housenumber", "addr:suburb", "addr:place", "addr:hamlet",
-	"source:addr:country", "source:addr:city", "source:addr:postcode", "source:addr:street", "source:addr:housename", "source:addr:housenumber", "source:addr:suburb", "source:addr:place", "source:addr:hamlet",
+	NULL::bigint AS "source:addr:country", NULL::bigint AS "source:addr:city", NULL::bigint AS "source:addr:postcode", NULL::bigint AS "source:addr:suburb", NULL::bigint AS "source:addr:place", NULL::bigint AS "source:addr:hamlet",
 	ST_Union(geometry) AS geometry, max(last_update) AS last_update
 INTO import.osm_addresses
 FROM osm_addresses
 GROUP BY osm_id, class,
 	"addr:country", "addr:city", "addr:postcode", "addr:street", "addr:housename", "addr:housenumber", "addr:suburb", "addr:place", "addr:hamlet",
-	"source:addr:country", "source:addr:city", "source:addr:postcode", "source:addr:street", "source:addr:housename", "source:addr:housenumber", "source:addr:suburb", "source:addr:place", "source:addr:hamlet";
+	"source:addr:country", "source:addr:city", "source:addr:postcode", "source:addr:suburb", "source:addr:place", "source:addr:hamlet";
 

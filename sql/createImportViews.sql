@@ -30,14 +30,12 @@ CREATE OR REPLACE VIEW osm_postcode AS
 CREATE OR REPLACE VIEW osm_addresses AS
 	SELECT osm_id, 'polygon' AS class,
 		"addr:country", "addr:city", "addr:postcode", "addr:street", "addr:housename", "addr:housenumber", "addr:suburb", "addr:place", "addr:hamlet",
-		"source:addr:country", "source:addr:city", "source:addr:postcode", "source:addr:street", "source:addr:housename", "source:addr:housenumber", "source:addr:suburb", "source:addr:place", "source:addr:hamlet",
 		way AS geometry, last_update 
 	FROM planet_osm_polygon
 	WHERE "addr:housenumber" IS NOT NULL
 		UNION
 	SELECT osm_id, 'point' AS class,
 		"addr:country", "addr:city", "addr:postcode", "addr:street", "addr:housename", "addr:housenumber", "addr:suburb", "addr:place", "addr:hamlet",
-		"source:addr:country", "source:addr:city", "source:addr:postcode", "source:addr:street", "source:addr:housename", "source:addr:housenumber", "source:addr:suburb", "source:addr:place", "source:addr:hamlet",
 		way AS geometry, last_update 
 	FROM planet_osm_point
 	WHERE "addr:housenumber" IS NOT NULL;

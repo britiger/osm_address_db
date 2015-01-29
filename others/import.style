@@ -12,16 +12,6 @@ node,way	addr:housenumber	text	polygon
 node,way	addr:suburb	text	polygon
 node,way	addr:place	text	polygon
 node,way	addr:hamlet	text	polygon
-# source fields (same as the upper fields with prefix source)
-node,way	source:addr:country	text
-node,way	source:addr:city	text
-node,way	source:addr:postcode	text
-node,way	source:addr:street	text
-node,way	source:addr:housename	text
-node,way	source:addr:housenumber	text
-node,way	source:addr:suburb	text
-node,way	source:addr:place	text
-node,way	source:addr:hamlet	text
 
 # For boundaries
 way	admin_level	text	polygon
