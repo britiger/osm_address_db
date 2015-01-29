@@ -10,12 +10,12 @@ CREATE INDEX osm_roads_osm_id_idx ON import.osm_roads USING btree (osm_id);
 -- addresses
 CREATE INDEX osm_addresses_geom ON import.osm_addresses USING gist (geometry);
 CREATE INDEX osm_addresses_osm_id_idx ON import.osm_addresses USING btree (osm_id);
-CREATE INDEX osm_addresses_addr_street_idx ON import.osm_addresses ("addr:street");
+CREATE INDEX osm_addresses_addr_street_idx ON import.osm_addresses ("addr:street" text_pattern_ops);
 
-CREATE INDEX osm_addresses_addr_country_idx ON import.osm_addresses ("source:addr:country");
-CREATE INDEX osm_addresses_addr_city_idx ON import.osm_addresses ("source:addr:city");
-CREATE INDEX osm_addresses_addr_postcode_idx ON import.osm_addresses ("source:addr:postcode");
-CREATE INDEX osm_addresses_addr_suburb_idx ON import.osm_addresses ("source:addr:suburb");
+CREATE INDEX osm_addresses_addr_country_idx ON import.osm_addresses ("addr:country" text_pattern_ops);
+CREATE INDEX osm_addresses_addr_city_idx ON import.osm_addresses ("addr:city" text_pattern_ops);
+CREATE INDEX osm_addresses_addr_postcode_idx ON import.osm_addresses ("addr:postcode" text_pattern_ops);
+CREATE INDEX osm_addresses_addr_suburb_idx ON import.osm_addresses ("addr:suburb" text_pattern_ops);
 
 CREATE INDEX osm_addresses_source_addr_country_idx ON import.osm_addresses ("source:addr:country");
 CREATE INDEX osm_addresses_source_addr_city_idx ON import.osm_addresses ("source:addr:city");
