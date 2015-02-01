@@ -21,6 +21,7 @@ CREATE INDEX osm_addresses_source_addr_country_idx ON import.osm_addresses ("sou
 CREATE INDEX osm_addresses_source_addr_city_idx ON import.osm_addresses ("source:addr:city");
 CREATE INDEX osm_addresses_source_addr_postcode_idx ON import.osm_addresses ("source:addr:postcode");
 CREATE INDEX osm_addresses_source_addr_suburb_idx ON import.osm_addresses ("source:addr:suburb");
+CREATE INDEX osm_addresses_source_addr_street_idx ON import.osm_addresses ("source:addr:street");
 
 -- places
 CREATE INDEX osm_places_geom ON import.osm_places USING gist (geometry);
