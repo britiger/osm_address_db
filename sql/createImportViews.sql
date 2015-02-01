@@ -53,4 +53,8 @@ CREATE OR REPLACE VIEW osm_associated AS
 CREATE OR REPLACE VIEW osm_roads AS
 	SELECT osm_id, name, highway, way AS geometry, last_update
 	FROM planet_osm_line
-	WHERE name IS NOT NULL AND highway IS NOT NULL;
+	WHERE name IS NOT NULL AND highway IS NOT NULL
+		UNION
+	SELECT osm_id, name, highway, way AS geometry, last_update
+	FROM planet_osm_polygon
+	WHERE name IS NOT NULL AND highway IS NOT NULL AND osm_id > 0;
