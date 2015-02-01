@@ -18,3 +18,7 @@ psql "dbname=$database host=$pghost user=$username password=$password port=5432"
 # create Views for Initial import-schema
 echo Creating views on import tables ...
 psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createView.sql > /dev/null
+
+# fill missing fields like postcode, city and country
+echo Fill postcode, city and country fields with surrounding polygons ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/fillMissingFields.sql > /dev/null
