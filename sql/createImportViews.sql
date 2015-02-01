@@ -24,7 +24,7 @@ CREATE OR REPLACE VIEW osm_places AS
 CREATE OR REPLACE VIEW osm_postcode AS
 	SELECT osm_id, postal_code, way AS geometry, last_update
 	FROM planet_osm_polygon
-	WHERE postal_code IS NOT NULL;
+	WHERE postal_code IS NOT NULL AND highway IS NULL;
 
 -- osm_addresses
 CREATE OR REPLACE VIEW osm_addresses AS
