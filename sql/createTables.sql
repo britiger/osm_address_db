@@ -14,6 +14,7 @@ SELECT osm_id, name, admin_level, "ISO3166-1", ST_Union(geometry) AS geometry, m
 INTO import.osm_admin_2
 FROM osm_admin
 WHERE admin_level = 2 AND "ISO3166-1" IS NOT NULL
+	AND osm_id < 0
 GROUP BY osm_id, name, admin_level, "ISO3166-1";
 
 -- Level 4 - State / Bundesland
@@ -21,6 +22,7 @@ SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_updat
 INTO import.osm_admin_4
 FROM osm_admin
 WHERE admin_level = 4
+	AND osm_id < 0
 GROUP BY osm_id, name, admin_level;
 
 -- Level 6 - County / Landkreis
@@ -28,6 +30,7 @@ SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_updat
 INTO import.osm_admin_6
 FROM osm_admin
 WHERE admin_level = 6
+	AND osm_id < 0
 GROUP BY osm_id, name, admin_level;
 
 -- Level 8 - City-Town / Stadt-Gemeinde
@@ -35,6 +38,7 @@ SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_updat
 INTO import.osm_admin_8
 FROM osm_admin
 WHERE admin_level = 8
+	AND osm_id < 0
 GROUP BY osm_id, name, admin_level;
 
 -- Level 9 and up - Parts of Cities
@@ -42,6 +46,7 @@ SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_updat
 INTO import.osm_admin_9_up
 FROM osm_admin
 WHERE admin_level >= 9
+	AND osm_id < 0
 GROUP BY osm_id, name, admin_level;
 
 -- osm_postcode
