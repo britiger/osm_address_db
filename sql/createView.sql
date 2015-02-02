@@ -2,6 +2,7 @@
 SET client_min_messages TO WARNING;
 
 -- Drop old views
+DROP MATERIALIZED VIEW IF EXISTS import.city_list_country CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_list CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_suburb CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_postcode CASCADE;
@@ -86,6 +87,15 @@ SELECT city_name, city_osm_id, 'city' AS city_type, geometry FROM import.county_
 
 CREATE INDEX city_list_geom ON import.city_list USING gist(geometry);
 CREATE INDEX city_list_city_osm_id ON import.city_list (city_osm_id);
+
+-- Combine Cities with counties
+CREATE MATERIALIZED VIEW import.city_list_country AS
+SELECT city_osm_id, city_name, osm_id AS country_osm_id, "ISO3166-1", city_list.geometry
+FROM import.city_list, import.osm_admin_2
+WHERE ST_WITHIN(import.city_list.geometry,import.osm_admin_2.geometry);
+
+CREATE INDEX city_list_country_geom ON import.city_list_country USING gist(geometry);
+CREATE INDEX city_list_country_osm_id ON import.city_list_country (country_osm_id);
 
 -- All postcodes within an state/county/city
 CREATE MATERIALIZED VIEW import.city_postcode

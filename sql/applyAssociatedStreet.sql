@@ -11,10 +11,11 @@ WHERE house_polygon IS NOT NULL OR house_point IS NOT NULL;
 
 -- Update addresses
 UPDATE import.osm_addresses AS addr
-SET "addr:street" = asso.name
---     ,"source:addr:street" = asso.osm_id
+SET "addr:street" = asso.name,
+	"source:addr:street" = asso.osm_id
 FROM osm_associated_with_street AS asso
 WHERE asso.name IS NOT NULL AND "addr:street" IS NULL
   AND ( (addr.class='point' AND addr.osm_id=ANY(asso.house_point)) OR
         (addr.class='polygon' AND addr.osm_id=ANY(asso.house_polygon)) );
 
+VACUUM ANALYSE import.osm_addresses;

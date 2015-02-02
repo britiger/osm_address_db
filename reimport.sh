@@ -26,3 +26,7 @@ psql "dbname=$database host=$pghost user=$username password=$password port=5432"
 # fill missing fields like postcode, city and country
 echo Fill postcode, city and country fields with surrounding polygons ...
 psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/fillMissingFields.sql > /dev/null
+
+# apply assisciated Street relations
+echo Apply relations type=associatedStreet ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/applyAssociatedStreet.sql > /dev/null
