@@ -1,8 +1,7 @@
--- ignore NOTICE
+﻿-- ignore NOTICE
 SET client_min_messages TO WARNING;
 
-﻿-- Vacuum Tables in import Schema
-
+-- Vacuum Tables in import Schema
 VACUUM ANALYSE import.osm_admin_2;
 VACUUM ANALYSE import.osm_admin_4;
 VACUUM ANALYSE import.osm_admin_6;
