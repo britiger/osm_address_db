@@ -16,7 +16,7 @@ LANGUAGE plpgsql VOLATILE;
 CREATE OR REPLACE FUNCTION delete_nodes() RETURNS trigger AS
 $BODY$
 BEGIN
-	INSERT INTO delete_nodes (osm_id) VALUES (OLD.osm_id);
+	INSERT INTO delete_nodes (osm_id) VALUES (OLD.id);
 	RETURN OLD;
 END
 $BODY$
@@ -43,7 +43,7 @@ LANGUAGE plpgsql VOLATILE;
 CREATE OR REPLACE FUNCTION delete_rels() RETURNS trigger AS
 $BODY$
 BEGIN
-	INSERT INTO delete_rels (osm_id) VALUES (OLD.osm_id);
+	INSERT INTO delete_rels (osm_id) VALUES (OLD.id);
 	RETURN OLD;
 END
 $BODY$
@@ -61,7 +61,7 @@ LANGUAGE plpgsql VOLATILE;
 CREATE OR REPLACE FUNCTION delete_ways() RETURNS trigger AS
 $BODY$
 BEGIN
-	INSERT INTO delete_ways (osm_id) VALUES (OLD.osm_id);
+	INSERT INTO delete_ways (osm_id) VALUES (OLD.id);
 	RETURN OLD;
 END
 $BODY$

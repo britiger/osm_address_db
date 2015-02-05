@@ -35,3 +35,7 @@ psql "dbname=$database host=$pghost user=$username password=$password port=5432"
 
 # call reimport.sh to create import-schema
 ./reimport.sh
+
+# TODO: get number from everywhere
+echo Set OSC number ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createConfigOSC.sql > /dev/null
