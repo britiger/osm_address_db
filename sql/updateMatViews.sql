@@ -1,4 +1,7 @@
-﻿REFRESH MATERIALIZED VIEW import.county_city;
+-- ignore NOTICE
+SET client_min_messages TO WARNING;
+
+REFRESH MATERIALIZED VIEW import.county_city;
 REFRESH MATERIALIZED VIEW import.state_city;
 REFRESH MATERIALIZED VIEW import.state_county;
 REFRESH MATERIALIZED VIEW import.country_state;

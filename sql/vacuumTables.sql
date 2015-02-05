@@ -1,4 +1,4 @@
-﻿-- ignore NOTICE
+-- ignore NOTICE
 SET client_min_messages TO WARNING;
 
 -- Vacuum Tables in import Schema
