@@ -1,4 +1,7 @@
-﻿-- deletes old (deleted and updated entries)
+-- ignore NOTICE
+SET client_min_messages TO WARNING;
+
+-- deletes old (deleted and updated entries)
 -- osm_addresses
 DELETE FROM import.osm_addresses AS addr
 USING delete_polygon_point AS del
