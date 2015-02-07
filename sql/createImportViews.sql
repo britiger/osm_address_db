@@ -1,4 +1,4 @@
--- ignore NOTICE
+﻿-- ignore NOTICE
 SET client_min_messages TO WARNING;
 
 -- create Import Views
@@ -58,3 +58,15 @@ CREATE OR REPLACE VIEW osm_roads AS
 	SELECT osm_id, name, highway, way AS geometry, last_update
 	FROM planet_osm_polygon
 	WHERE name IS NOT NULL AND highway IS NOT NULL AND osm_id > 0;
+
+-- delete_polygon_point
+CREATE OR REPLACE VIEW delete_polygon_point AS
+	SELECT * FROM delete_point
+		UNION
+	SELECT * FROM delete_polygon;
+
+-- delete_polygon_line
+CREATE OR REPLACE VIEW delete_polygon_line AS
+	SELECT * FROM delete_line
+		UNION
+	SELECT * FROM delete_polygon;
