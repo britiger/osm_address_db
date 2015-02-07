@@ -45,8 +45,20 @@ then
 	exit 1
 fi
 
-## make update using tmp/update.osc.gz
+# make update using tmp/update.osc.gz
 osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username tmp/update.osc.gz
+
+# Delete old entries in import schema
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/deleteOldEntries.sql > /dev/null
+
+# copy new entries
+
+# rerun to fill all empty fields +  associatedStreets
+./rerun.sh yes
+
+# truncate delete tables
+echo Truncate delete_ tables ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/truncateDeleteTables.sql > /dev/null
 
 # add one to seq number and update time
 echo Update seqence and update time on database ...
