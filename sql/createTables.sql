@@ -5,78 +5,112 @@ SET client_min_messages TO WARNING;
 DROP SCHEMA IF EXISTS  import CASCADE;
 CREATE SCHEMA import;
 
--- copy data
-
 -- osm_admin
 
 -- Level 2 - Country / Land
-SELECT osm_id, name, admin_level, "ISO3166-1", ST_Union(geometry) AS geometry, max(last_update) AS last_update
-INTO import.osm_admin_2
-FROM osm_admin
-WHERE admin_level = 2 AND "ISO3166-1" IS NOT NULL
-	AND osm_id < 0
-GROUP BY osm_id, name, admin_level, "ISO3166-1";
+CREATE TABLE import.osm_admin_2
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  "ISO3166-1" text,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 
 -- Level 4 - State / Bundesland
-SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_update) AS last_update
-INTO import.osm_admin_4
-FROM osm_admin
-WHERE admin_level = 4
-	AND osm_id < 0
-GROUP BY osm_id, name, admin_level;
+CREATE TABLE import.osm_admin_4
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 
 -- Level 6 - County / Landkreis
-SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_update) AS last_update
-INTO import.osm_admin_6
-FROM osm_admin
-WHERE admin_level = 6
-	AND osm_id < 0
-GROUP BY osm_id, name, admin_level;
+CREATE TABLE import.osm_admin_6
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 
 -- Level 8 - City-Town / Stadt-Gemeinde
-SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_update) AS last_update
-INTO import.osm_admin_8
-FROM osm_admin
-WHERE admin_level = 8
-	AND osm_id < 0
-GROUP BY osm_id, name, admin_level;
+CREATE TABLE import.osm_admin_8
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 
 -- Level 9 and up - Parts of Cities
-SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_update) AS last_update
-INTO import.osm_admin_9_up
-FROM osm_admin
-WHERE admin_level >= 9
-	AND osm_id < 0
-GROUP BY osm_id, name, admin_level;
+CREATE TABLE import.osm_admin_9_up
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 
 -- osm_postcode
-SELECT osm_id, postal_code, ST_Union(way) AS geometry, max(last_update) AS last_update
-INTO import.osm_postcode
-FROM planet_osm_polygon
-WHERE postal_code IS NOT NULL
-GROUP BY osm_id, postal_code;
+CREATE TABLE import.osm_postcode
+(
+  osm_id bigint,
+  postal_code text,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 
 -- osm_places
-SELECT osm_id, class, name, type, 
-CASE WHEN population~E'^\\d+$' THEN population::bigint ELSE NULL::bigint END AS population,
-ST_Union(geometry) AS geometry, max(last_update) AS last_update
-INTO import.osm_places
-FROM osm_places
-GROUP BY osm_id, class, name, type, population;
+CREATE TABLE import.osm_places
+(
+  osm_id bigint,
+  class text,
+  name text,
+  type text,
+  population bigint,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 
 -- osm_roads
-SELECT * 
-INTO import.osm_roads
-FROM osm_roads;
+CREATE TABLE import.osm_roads
+(
+  osm_id bigint,
+  name text,
+  highway text,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 
 -- osm_addresses
-SELECT osm_id, class,
-	"addr:country", "addr:city", "addr:postcode", "addr:street", "addr:housename", "addr:housenumber", "addr:suburb", "addr:place", "addr:hamlet",
-	NULL::bigint AS "source:addr:country", NULL::bigint AS "source:addr:city", NULL::bigint AS "source:addr:postcode", NULL::bigint AS "source:addr:suburb", NULL::bigint AS "source:addr:place", NULL::bigint AS "source:addr:hamlet", NULL::bigint AS "source:addr:street",
-	ST_Union(geometry) AS geometry, max(last_update) AS last_update
-INTO import.osm_addresses
-FROM osm_addresses
-GROUP BY osm_id, class,
-	"addr:country", "addr:city", "addr:postcode", "addr:street", "addr:housename", "addr:housenumber", "addr:suburb", "addr:place", "addr:hamlet",
-	"source:addr:country", "source:addr:city", "source:addr:postcode", "source:addr:suburb", "source:addr:place", "source:addr:hamlet", "source:addr:street";
+CREATE TABLE import.osm_addresses
+(
+  osm_id bigint,
+  class text,
+  "addr:country" text,
+  "addr:city" text,
+  "addr:postcode" text,
+  "addr:street" text,
+  "addr:housename" text,
+  "addr:housenumber" text,
+  "addr:suburb" text,
+  "addr:place" text,
+  "addr:hamlet" text,
+  "source:addr:country" bigint,
+  "source:addr:city" bigint,
+  "source:addr:postcode" bigint,
+  "source:addr:suburb" bigint,
+  "source:addr:place" bigint,
+  "source:addr:hamlet" bigint,
+  "source:addr:street" bigint,
+  geometry geometry,
+  last_update timestamp with time zone
+);
 

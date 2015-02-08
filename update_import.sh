@@ -28,6 +28,8 @@ if [ ! -d tmp ]; then
 fi
 rm -f tmp/*
 
+echo Loading from url ...
+
 status=`curl -o tmp/update.osc.gz -D tmp/head.txt --silent --write-out '%{http_code} %{size_download}\n' $url`
 
 # check status code
@@ -45,16 +47,25 @@ then
 	exit 1
 fi
 
+echo Apply update number $next_osc ...
+
 # make update using tmp/update.osc.gz
-osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username tmp/update.osc.gz
+osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username $o2pParameters tmp/update.osc.gz
 
 # Delete old entries in import schema
+echo Delete old elements ...
 psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/deleteOldEntries.sql > /dev/null
 
 # copy new entries
+echo Copy new elements ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/copyTables.sql > /dev/null
+
+# Refresh the materialized views
+echo Update views ...
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateMatViews.sql > /dev/null
 
 # rerun to fill all empty fields +  associatedStreets
-./rerun.sh yes
+./reimport.sh yes
 
 # truncate delete tables
 echo Truncate delete_ tables ...
@@ -62,6 +73,6 @@ psql "dbname=$database host=$pghost user=$username password=$password port=5432"
 
 # add one to seq number and update time
 echo Update seqence and update time on database ...
-#psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateSeqTime.sql > /dev/null
+psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateSeqTime.sql > /dev/null
 
 echo Finish

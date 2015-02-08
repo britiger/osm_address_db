@@ -8,6 +8,7 @@ pghost=127.0.0.1
 
 o2pProcesses=4
 o2pCache=3500MB
+#o2pParameters='--flat-nodes ./flat-nodes.db'
 
 # update path including / at the end
 updatePath=http://download.geofabrik.de/europe/germany/brandenburg-updates/
