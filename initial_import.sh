@@ -39,3 +39,8 @@ psql "dbname=$database host=$pghost user=$username password=$password port=5432"
 # TODO: get number from everywhere
 echo Set OSC number ...
 psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createConfigOSC.sql > /dev/null
+
+if [ $updateStartNumber -ne 999999999 ]
+then
+	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'UPDATE config_values SET val='$updateStartNumber' WHERE "key"='\''next_osc'\'';' > /dev/null
+fi
