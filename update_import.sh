@@ -23,8 +23,9 @@ if [ ! -d tmp ]; then
 fi
 rm -f tmp/*
 
-# TODO: counter for maximum updates per run
-while [ $successLoad -eq 1 ]
+# TODO: counter for maximum updates per run in config
+maxUpdateCount=3
+while [ $successLoad -eq 1 ] && [ $maxUpdateCount -ge 1 ]
 do
 	# reset success flag for current iteration
 	successLoad=0
@@ -66,9 +67,11 @@ do
 
 		# make update using tmp/update.osc.gz
 		osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username $o2pParameters tmp/update.osc.gz
-		echo Update sequence on database ...
+		echo Update sequence on database and VACUUM tables ...
 		psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateSeq.sql > /dev/null
+		psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/vacuumPlanet.sql > /dev/null
 		next_osc=$((next_osc + 1))
+		maxUpdateCount=$((maxUpdateCount - 1))
 		success=1
 	fi
 done
