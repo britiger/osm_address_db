@@ -70,7 +70,7 @@ GROUP BY osm_id, class, name, type, population;
 
 -- osm_roads
 INSERT INTO import.osm_roads
-SELECT osm_id, name, highway, geometry, last_update
+SELECT osm_id, name, highway, "addr:suburb", geometry, last_update
 FROM osm_roads
 WHERE last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp;
 
