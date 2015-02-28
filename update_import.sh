@@ -13,66 +13,95 @@ export PGPASS=$password
 # read seq-number
 next_osc=`psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'SELECT val FROM config_values WHERE "key"='\''next_osc'\'';'`
 
-# create 3 Blocks of numbers
-block3=$(($next_osc % 1000))
-tmp=$(($next_osc / 1000))
-block2=$(($tmp % 1000))
-tmp=$(($tmp / 1000))
-block1=$(($tmp % 1000))
+# set success variables
+success=0
+successLoad=1
 
-printf -v num_path "%03d/%03d/%03d" $block1 $block2 $block3
-url=$updatePath$num_path.osc.gz
-
+# create tmp dir if not exists and cleanup
 if [ ! -d tmp ]; then
 	mkdir tmp
 fi
 rm -f tmp/*
 
-echo Loading from url ...
+# TODO: counter for maximum updates per run in config
+maxUpdateCount=3
+while [ $successLoad -eq 1 ] && [ $maxUpdateCount -ge 1 ]
+do
+	# reset success flag for current iteration
+	successLoad=0
 
-status=`curl -o tmp/update.osc.gz -D tmp/head.txt --silent --write-out '%{http_code} %{size_download}\n' $url`
+	# create 3 Blocks of numbers
+	block3=$(($next_osc % 1000))
+	tmp=$(($next_osc / 1000))
+	block2=$(($tmp % 1000))
+	tmp=$(($tmp / 1000))
+	block1=$(($tmp % 1000))
 
-# check status code
-if [[ $status != "200"* ]]
+	printf -v num_path "%03d/%03d/%03d" $block1 $block2 $block3
+	url=$updatePath$num_path.osc.gz
+
+	echo Loading from url ...
+	status=`curl -o tmp/update.osc.gz -D tmp/head.txt --silent --write-out '%{http_code} %{size_download}\n' $url`
+
+	# check status code
+	if [[ $status != "200"* ]]
+	then
+		echo 'Error loading update with number' $next_osc ': HTTP-Status' `echo $status | awk '{print $1}'` '.'
+	else
+		successLoad=1
+	fi
+
+	file_size_head=`cat tmp/head.txt | grep Content-Length | awk '{print $2+0}'`
+	file_size_load=`echo $status | awk '{print $2+0}'`
+	if [ ! $file_size_load -eq $file_size_head ] && [ $successLoad -eq 1 ]
+	then
+		echo 'Error loading update with number $next_osc: illegal file size' $file_size_load 'loaded' $file_size_head 'expected.'
+		successLoad=0
+	else
+		successLoad=1
+	fi
+
+	if [[ $successLoad -eq 1 ]]
+	then
+		echo Apply update number $next_osc ...
+
+		# make update using tmp/update.osc.gz
+		osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username $o2pParameters tmp/update.osc.gz
+		echo Update sequence on database and VACUUM tables ...
+		psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateSeq.sql > /dev/null
+		psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/vacuumPlanet.sql > /dev/null
+		next_osc=$((next_osc + 1))
+		maxUpdateCount=$((maxUpdateCount - 1))
+		success=1
+	fi
+done
+
+if [[ $success -eq 1 ]]
 then
-	echo 'Error loading update with number' $next_osc ': HTTP-Status' `echo $status | awk '{print $1}'` '.'
-	exit 1
+	# Delete old entries in import schema
+	echo Delete old elements ...
+	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/deleteOldEntries.sql > /dev/null
+
+	# copy new entries
+	echo Copy new elements ...
+	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/copyTables.sql > /dev/null
+
+	# Refresh the materialized views
+	echo Update views ...
+	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateMatViews.sql > /dev/null
+
+	# rerun to fill all empty fields +  associatedStreets
+	./reimport.sh yes
+
+	# truncate delete tables
+	echo Truncate delete_ tables ...
+	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/truncateDeleteTables.sql > /dev/null
+
+	# add one to seq number and update time
+	echo Update time on database ...
+	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateTime.sql > /dev/null
+
+	echo Finish
+else
+	echo Nothing loaded.
 fi
-
-file_size_head=`cat tmp/head.txt | grep Content-Length | awk '{print $2+0}'`
-file_size_load=`echo $status | awk '{print $2+0}'`
-if [[ ! $file_size_load -eq $file_size_head ]]
-then
-	echo 'Error loading update with number $next_osc: illegal file size' $file_size_load 'loaded' $file_size_head 'expected.'
-	exit 1
-fi
-
-echo Apply update number $next_osc ...
-
-# make update using tmp/update.osc.gz
-osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username $o2pParameters tmp/update.osc.gz
-
-# Delete old entries in import schema
-echo Delete old elements ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/deleteOldEntries.sql > /dev/null
-
-# copy new entries
-echo Copy new elements ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/copyTables.sql > /dev/null
-
-# Refresh the materialized views
-echo Update views ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateMatViews.sql > /dev/null
-
-# rerun to fill all empty fields +  associatedStreets
-./reimport.sh yes
-
-# truncate delete tables
-echo Truncate delete_ tables ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/truncateDeleteTables.sql > /dev/null
-
-# add one to seq number and update time
-echo Update seqence and update time on database ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateSeqTime.sql > /dev/null
-
-echo Finish
