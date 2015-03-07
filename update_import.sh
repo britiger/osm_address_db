@@ -42,7 +42,7 @@ do
 
 	echo Loading from url ...
 	status=`curl -o tmp/update.osc.gz -D tmp/head.txt --silent --write-out '%{http_code} %{size_download}\n' $url`
-
+echo STatus: $status
 	# check status code
 	if [[ $status != "200"* ]]
 	then
@@ -57,8 +57,6 @@ do
 	then
 		echo 'Error loading update with number $next_osc: illegal file size' $file_size_load 'loaded' $file_size_head 'expected.'
 		successLoad=0
-	else
-		successLoad=1
 	fi
 
 	if [[ $successLoad -eq 1 ]]
