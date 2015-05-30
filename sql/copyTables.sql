@@ -73,6 +73,7 @@ INSERT INTO import.osm_roads
 SELECT osm_id, name, highway, "addr:suburb", geometry, last_update
 FROM osm_roads
 WHERE last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp;
+UPDATE import.osm_roads SET geometry=ST_ExteriorRing(geometry) WHERE ST_geometrytype(geometry) = 'ST_Polygon';
 
 -- osm_addresses
 INSERT INTO import.osm_addresses
