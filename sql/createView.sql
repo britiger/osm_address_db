@@ -121,12 +121,13 @@ FROM import.osm_admin_9_up AS suburb,
 import.city_list
 WHERE ST_WITHIN(suburb.geometry, city_list.geometry);
 
--- All Roads within an city
+-- All Roads within a city
 CREATE MATERIALIZED VIEW import.city_roads
 AS SELECT 
 road.name as road_name, 
 city_osm_id, 
-string_agg(road.osm_id::text, ',') as road_osm_ids
+string_agg(road.osm_id::text, ',') as road_osm_ids,
+ST_UNION(road.geometry) as roads_geom
 FROM import.osm_roads as road, 
 import.city_list
 WHERE ST_INTERSECTS(road.geometry, city_list.geometry)
