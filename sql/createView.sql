@@ -137,10 +137,17 @@ CREATE INDEX city_roads_idx_city ON import.city_roads USING btree (city_osm_id);
 CREATE INDEX city_roads_road_name ON import.city_roads (road_name);
 
 -- All Places within an city
-CREATE MATERIALIZED VIEW import.city_places
-AS SELECT place.name as place_name, place."type" as place_type, city_osm_id, place.osm_id as place_osm_id, place.class as place_class
-FROM import.osm_places as place, import.city_list
-WHERE ST_WITHIN(place.geometry, city_list.geometry);
+CREATE MATERIALIZED VIEW import.city_places AS
+SELECT 	place.name AS place_name,
+	city_list.city_osm_id,
+	string_agg(distinct place.type, ',') AS place_type, 
+	string_agg(place.osm_id  || ';' || place.class, ',') AS place_osm_ids,
+	st_union(place.geometry) AS place_geom
+FROM 	import.osm_places place,
+	import.city_list
+WHERE st_within(place.geometry, city_list.geometry)
+  AND place.type IN ('village','hamlet','suburb','neighbourhood')
+GROUP BY place.name, city_list.city_osm_id;
 
 -- VIEW for finding errors (Distance between addresses)
 CREATE OR REPLACE VIEW import.osm_addresses_distance AS 
