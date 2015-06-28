@@ -126,12 +126,13 @@ CREATE MATERIALIZED VIEW import.city_roads
 AS SELECT 
 road.name as road_name, 
 city_osm_id, 
+"addr:suburb" as suburb,
 string_agg(road.osm_id::text, ',') as road_osm_ids,
 ST_UNION(road.geometry) as roads_geom
 FROM import.osm_roads as road, 
 import.city_list
 WHERE ST_INTERSECTS(road.geometry, city_list.geometry)
-GROUP BY road_name, city_osm_id;
+GROUP BY road_name, suburb, city_osm_id;
 
 CREATE INDEX city_roads_idx_city ON import.city_roads USING btree (city_osm_id);
 CREATE INDEX city_roads_road_name ON import.city_roads (road_name);
