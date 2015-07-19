@@ -11,5 +11,7 @@ o2pCache=3500MB
 #o2pParameters='--flat-nodes ./flat-nodes.db'
 
 # update path including / at the end
-updatePath=http://download.geofabrik.de/europe/germany-updates/
+# The update Path contains the base url where the osc are: e.g. http://download.geofabrik.de/europe/germany-updates/
+updatePath=none
 updateStartNumber=800
+updateMaxCount=5

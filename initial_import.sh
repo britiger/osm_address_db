@@ -44,3 +44,8 @@ if [ $updateStartNumber -ne 999999999 ]
 then
 	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'UPDATE config_values SET val='$updateStartNumber' WHERE "key"='\''next_osc'\'';' > /dev/null
 fi
+
+if [ $updatePath != 'none' ]
+then
+        psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'UPDATE config_values SET val='\'''$updatePath''\'' WHERE "key"='\''update_url'\'';' > /dev/null
+fi

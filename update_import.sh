@@ -12,6 +12,7 @@ export PGPASS=$password
 
 # read seq-number
 next_osc=`psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'SELECT val FROM config_values WHERE "key"='\''next_osc'\'';'`
+update_url=`psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'SELECT val FROM config_values WHERE "key"='\''update_url'\'';'`
 
 # set success variables
 success=0
@@ -23,9 +24,7 @@ if [ ! -d tmp ]; then
 fi
 rm -f tmp/*
 
-# TODO: counter for maximum updates per run in config
-maxUpdateCount=3
-while [ $successLoad -eq 1 ] && [ $maxUpdateCount -ge 1 ]
+while [ $successLoad -eq 1 ] && [ $updateMaxCount -ge 1 ]
 do
 	# reset success flag for current iteration
 	successLoad=0
@@ -38,11 +37,11 @@ do
 	block1=$(($tmp % 1000))
 
 	printf -v num_path "%03d/%03d/%03d" $block1 $block2 $block3
-	url=$updatePath$num_path.osc.gz
+	url=$update_url$num_path.osc.gz
 
 	echo Loading from url ...
 	status=`curl -o tmp/update.osc.gz -D tmp/head.txt --silent --write-out '%{http_code} %{size_download}\n' $url`
-echo STatus: $status
+	
 	# check status code
 	if [[ $status != "200"* ]]
 	then
@@ -69,7 +68,7 @@ echo STatus: $status
 		psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateSeq.sql > /dev/null
 		psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/vacuumPlanet.sql > /dev/null
 		next_osc=$((next_osc + 1))
-		maxUpdateCount=$((maxUpdateCount - 1))
+		updateMaxCount=$((updateMaxCount - 1))
 		success=1
 	fi
 done
@@ -89,7 +88,7 @@ then
 	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateMatViews.sql > /dev/null
 
 	# rerun to fill all empty fields +  associatedStreets
-	./reimport.sh yes
+	./reimport.sh full
 
 	# truncate delete tables
 	echo Truncate delete_ tables ...
