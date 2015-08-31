@@ -5,6 +5,14 @@ SET client_min_messages TO WARNING;
 
 -- osm_admin
 
+INSERT INTO import.osm_admin
+SELECT osm_id, name, admin_level, "ISO3166-1", ST_Union(geometry) AS geometry, max(last_update) AS last_update
+FROM osm_admin
+WHERE ((admin_level = 2 AND "ISO3166-1" IS NOT NULL) OR admin_level>2)
+	AND osm_id < 0
+	AND last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
+GROUP BY osm_id, name, admin_level, "ISO3166-1";
+
 -- Level 2 - Country / Land
 INSERT INTO import.osm_admin_2
 SELECT osm_id, name, admin_level, "ISO3166-1", ST_Union(geometry) AS geometry, max(last_update) AS last_update
@@ -13,6 +21,15 @@ WHERE admin_level = 2 AND "ISO3166-1" IS NOT NULL
 	AND osm_id < 0
 	AND last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
 GROUP BY osm_id, name, admin_level, "ISO3166-1";
+
+-- Level 3
+INSERT INTO import.osm_admin_3
+SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_update) AS last_update
+FROM osm_admin
+WHERE admin_level = 3
+	AND osm_id < 0
+	AND last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
+GROUP BY osm_id, name, admin_level;
 
 -- Level 4 - State / Bundesland
 INSERT INTO import.osm_admin_4
@@ -23,11 +40,29 @@ WHERE admin_level = 4
 	AND last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
 GROUP BY osm_id, name, admin_level;
 
+-- Level 5 - Regierungsbezirke
+INSERT INTO import.osm_admin_5
+SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_update) AS last_update
+FROM osm_admin
+WHERE admin_level = 5
+	AND osm_id < 0
+	AND last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
+GROUP BY osm_id, name, admin_level;
+
 -- Level 6 - County / Landkreis
 INSERT INTO import.osm_admin_6
 SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_update) AS last_update
 FROM osm_admin
 WHERE admin_level = 6
+	AND osm_id < 0
+	AND last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
+GROUP BY osm_id, name, admin_level;
+
+-- Level 7
+INSERT INTO import.osm_admin_7
+SELECT osm_id, name, admin_level, ST_Union(geometry) AS geometry, max(last_update) AS last_update
+FROM osm_admin
+WHERE admin_level = 7
 	AND osm_id < 0
 	AND last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
 GROUP BY osm_id, name, admin_level;
@@ -52,11 +87,9 @@ GROUP BY osm_id, name, admin_level;
 
 -- osm_postcode
 INSERT INTO import.osm_postcode
-SELECT osm_id, postal_code, ST_Union(way) AS geometry, max(last_update) AS last_update
-FROM planet_osm_polygon
-WHERE postal_code IS NOT NULL
-	AND highway IS NULL
-	AND last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
+SELECT osm_id, postal_code, ST_Union(geometry) AS geometry, max(last_update) AS last_update
+FROM osm_postcode
+WHERE last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp
 GROUP BY osm_id, postal_code;
 
 -- osm_places

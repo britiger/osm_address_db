@@ -11,3 +11,6 @@ REFRESH MATERIALIZED VIEW import.city_postcode;
 REFRESH MATERIALIZED VIEW import.city_suburb;
 REFRESH MATERIALIZED VIEW import.city_roads;
 REFRESH MATERIALIZED VIEW import.city_places;
+-- TODO
+REFRESH MATERIALIZED VIEW import.osm_admin_hierarchy_max_level;
+REFRESH MATERIALIZED VIEW import.osm_admin_hierarchy;

@@ -12,6 +12,8 @@ DROP MATERIALIZED VIEW IF EXISTS import.state_city CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.county_city CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_roads CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_places CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS import.osm_admin_hierarchy_max_level;
+DROP MATERIALIZED VIEW IF EXISTS import.osm_admin_hierarchy;
 DROP VIEW IF EXISTS import.osm_addresses_distance CASCADE;
 
 -- Creating views in final import schema
@@ -76,6 +78,32 @@ WHERE ST_WITHIN(state.geometry, country.geometry);
 
 CREATE INDEX country_state_country_osm_id_idx ON import.country_state (country_osm_id);
 CREATE INDEX country_state_state_osm_id_idx ON import.country_state (state_osm_id);
+
+-- Build list of hierarchy for every admin_level
+CREATE MATERIALIZED VIEW import.osm_admin_hierarchy
+AS SELECT 	big.osm_id big_osm_id, small.osm_id small_osm_id,
+		big.admin_level big_admin_level, small.admin_level small_admin_level,
+		big.name big_name, small.name small_name
+FROM 	import.osm_admin big,
+	import.osm_admin small
+WHERE st_intersects(big.geometry, small.geometry) 
+  AND NOT st_touches(big.geometry, small.geometry)
+  AND big.admin_level < small.admin_level;
+
+CREATE INDEX osm_admin_big_osm_id_idx ON import.osm_admin_hierarchy (big_osm_id);
+CREATE INDEX osm_admin_small_osm_id_idx ON import.osm_admin_hierarchy (small_osm_id);
+
+-- List of all ploygons which are the last in hierachy (max. level 8) (city_list)
+CREATE MATERIALIZED VIEW import.osm_admin_hierarchy_max_level
+AS SELECT small_osm_id osm_id, small_name AS name, small_admin_level admin_level
+FROM import.osm_admin_hierarchy hi
+WHERE ( SELECT count(small_osm_id) 
+		FROM import.osm_admin_hierarchy se 
+		WHERE se.big_osm_id=hi.small_osm_id 
+		  AND se.small_admin_level<=8 ) < 1
+  AND small_admin_level<=8;
+
+CREATE INDEX osm_admin_hierarchy_max_level_osm_id_idx ON import.osm_admin_hierarchy_max_level (osm_id);
 
 -- List of all Cities
 CREATE MATERIALIZED VIEW import.city_list

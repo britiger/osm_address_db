@@ -15,6 +15,7 @@ node,way	addr:hamlet	text	polygon
 
 # For boundaries
 way	admin_level	text	polygon
+way	boundary	text	polygon
 way	ISO3166-1	text	polygon
 
 # For places

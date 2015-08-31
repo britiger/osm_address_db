@@ -31,17 +31,33 @@ CREATE INDEX osm_places_osm_id_idx ON import.osm_places USING btree (osm_id);
 CREATE INDEX osm_postcode_geom ON import.osm_postcode USING gist (geometry);
 CREATE INDEX osm_postcode_osm_id_idx ON import.osm_postcode USING btree (osm_id);
 
+-- admin
+CREATE INDEX osm_admin_geom ON import.osm_admin USING gist (geometry);
+CREATE INDEX osm_admin_osm_id_idx ON import.osm_admin USING btree (osm_id);
+
 -- admin 2
 CREATE INDEX osm_admin_2_geom ON import.osm_admin_2 USING gist (geometry);
 CREATE INDEX osm_admin_2_osm_id_idx ON import.osm_admin_2 USING btree (osm_id);
+
+-- admin 3
+CREATE INDEX osm_admin_3_geom ON import.osm_admin_3 USING gist (geometry);
+CREATE INDEX osm_admin_3_osm_id_idx ON import.osm_admin_3 USING btree (osm_id);
 
 -- admin 4
 CREATE INDEX osm_admin_4_geom ON import.osm_admin_4 USING gist (geometry);
 CREATE INDEX osm_admin_4_osm_id_idx ON import.osm_admin_4 USING btree (osm_id);
 
+-- admin 5
+CREATE INDEX osm_admin_5_geom ON import.osm_admin_5 USING gist (geometry);
+CREATE INDEX osm_admin_5_osm_id_idx ON import.osm_admin_5 USING btree (osm_id);
+
 -- admin 6
 CREATE INDEX osm_admin_6_geom ON import.osm_admin_6 USING gist (geometry);
 CREATE INDEX osm_admin_6_osm_id_idx ON import.osm_admin_6 USING btree (osm_id);
+
+-- admin 7
+CREATE INDEX osm_admin_7_geom ON import.osm_admin_7 USING gist (geometry);
+CREATE INDEX osm_admin_7_osm_id_idx ON import.osm_admin_7 USING btree (osm_id);
 
 -- admin 8
 CREATE INDEX osm_admin_8_geom ON import.osm_admin_8 USING gist (geometry);

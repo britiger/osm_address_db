@@ -7,8 +7,18 @@ DELETE FROM import.osm_addresses AS addr
 USING delete_polygon_point AS del
 WHERE addr.osm_id=del.osm_id;
 
+-- osm_admin
+DELETE FROM import.osm_admin AS admin
+USING delete_polygon AS del
+WHERE admin.osm_id=del.osm_id;
+
 -- osm_admin_2
 DELETE FROM import.osm_admin_2 AS admin
+USING delete_polygon AS del
+WHERE admin.osm_id=del.osm_id;
+
+-- osm_admin_3
+DELETE FROM import.osm_admin_3 AS admin
 USING delete_polygon AS del
 WHERE admin.osm_id=del.osm_id;
 
@@ -17,8 +27,18 @@ DELETE FROM import.osm_admin_4 AS admin
 USING delete_polygon AS del
 WHERE admin.osm_id=del.osm_id;
 
+-- osm_admin_5
+DELETE FROM import.osm_admin_5 AS admin
+USING delete_polygon AS del
+WHERE admin.osm_id=del.osm_id;
+
 -- osm_admin_6
 DELETE FROM import.osm_admin_6 AS admin
+USING delete_polygon AS del
+WHERE admin.osm_id=del.osm_id;
+
+-- osm_admin_7
+DELETE FROM import.osm_admin_7 AS admin
 USING delete_polygon AS del
 WHERE admin.osm_id=del.osm_id;
 

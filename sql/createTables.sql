@@ -7,6 +7,16 @@ CREATE SCHEMA import;
 
 -- osm_admin
 
+CREATE TABLE import.osm_admin
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  "ISO3166-1" text,
+  geometry geometry,
+  last_update timestamp(0) with time zone
+);
+
 -- Level 2 - Country / Land
 CREATE TABLE import.osm_admin_2
 (
@@ -15,7 +25,17 @@ CREATE TABLE import.osm_admin_2
   admin_level integer,
   "ISO3166-1" text,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
+);
+
+-- Level 3
+CREATE TABLE import.osm_admin_3
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  geometry geometry,
+  last_update timestamp(0) with time zone
 );
 
 -- Level 4 - State / Bundesland
@@ -25,7 +45,17 @@ CREATE TABLE import.osm_admin_4
   name text,
   admin_level integer,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
+);
+
+-- Level 5
+CREATE TABLE import.osm_admin_5
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  geometry geometry,
+  last_update timestamp(0) with time zone
 );
 
 -- Level 6 - County / Landkreis
@@ -35,7 +65,17 @@ CREATE TABLE import.osm_admin_6
   name text,
   admin_level integer,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
+);
+
+-- Level 7
+CREATE TABLE import.osm_admin_7
+(
+  osm_id bigint,
+  name text,
+  admin_level integer,
+  geometry geometry,
+  last_update timestamp(0) with time zone
 );
 
 -- Level 8 - City-Town / Stadt-Gemeinde
@@ -45,7 +85,7 @@ CREATE TABLE import.osm_admin_8
   name text,
   admin_level integer,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
 );
 
 -- Level 9 and up - Parts of Cities
@@ -55,7 +95,7 @@ CREATE TABLE import.osm_admin_9_up
   name text,
   admin_level integer,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
 );
 
 -- osm_postcode
@@ -64,7 +104,7 @@ CREATE TABLE import.osm_postcode
   osm_id bigint,
   postal_code text,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
 );
 
 -- osm_places
@@ -76,7 +116,7 @@ CREATE TABLE import.osm_places
   type text,
   population bigint,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
 );
 
 -- osm_roads
@@ -87,7 +127,7 @@ CREATE TABLE import.osm_roads
   highway text,
   "addr:suburb" text,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
 );
 
 -- osm_addresses
@@ -112,6 +152,6 @@ CREATE TABLE import.osm_addresses
   "source:addr:hamlet" bigint,
   "source:addr:street" bigint,
   geometry geometry,
-  last_update timestamp with time zone
+  last_update timestamp(0) with time zone
 );
 
