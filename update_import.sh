@@ -11,7 +11,7 @@ export PGPORT=$pgport
 export PGUSER=$username
 export PGPASSWORD=$password
 export PGDATABASE=$database 
-
+psql
 # read seq-number
 next_osc=`psql -t -c 'SELECT val FROM config_values WHERE "key"='\''next_osc'\'';'`
 update_url=`psql -t -c 'SELECT val FROM config_values WHERE "key"='\''update_url'\'';'`
@@ -65,7 +65,7 @@ do
 		echo Apply update number $next_osc ...
 
 		# make update using tmp/update.osc.gz
-		osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username $o2pParameters tmp/update.osc.gz
+		osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database -S others/import.style -U $username $o2pParameters tmp/update.osc.gz
 		echo Update sequence on database and VACUUM tables ...
 		psql -f sql/updateSeq.sql > /dev/null
 		psql -f sql/vacuumPlanet.sql > /dev/null
