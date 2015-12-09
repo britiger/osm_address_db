@@ -6,13 +6,15 @@
 . ./config 
 
 # mapping user and password for osm2pgsql
-export pguser=$username
-export pgpass=$password
-export PGPASS=$password
+export PGHOST=$pghost
+export PGPORT=$pgport
+export PGUSER=$username
+export PGPASSWORD=$password
+export PGDATABASE=$database 
 
 # read seq-number
-next_osc=`psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'SELECT val FROM config_values WHERE "key"='\''next_osc'\'';'`
-update_url=`psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'SELECT val FROM config_values WHERE "key"='\''update_url'\'';'`
+next_osc=`psql -t -c 'SELECT val FROM config_values WHERE "key"='\''next_osc'\'';'`
+update_url=`psql -t -c 'SELECT val FROM config_values WHERE "key"='\''update_url'\'';'`
 
 # set success variables
 success=0
@@ -65,8 +67,8 @@ do
 		# make update using tmp/update.osc.gz
 		osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username $o2pParameters tmp/update.osc.gz
 		echo Update sequence on database and VACUUM tables ...
-		psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateSeq.sql > /dev/null
-		psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/vacuumPlanet.sql > /dev/null
+		psql -f sql/updateSeq.sql > /dev/null
+		psql -f sql/vacuumPlanet.sql > /dev/null
 		next_osc=$((next_osc + 1))
 		updateMaxCount=$((updateMaxCount - 1))
 		success=1
@@ -77,26 +79,26 @@ if [[ $success -eq 1 ]]
 then
 	# Delete old entries in import schema
 	echo Delete old elements ...
-	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/deleteOldEntries.sql > /dev/null
+	psql -f sql/deleteOldEntries.sql > /dev/null
 
 	# copy new entries
 	echo Copy new elements ...
-	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/copyTables.sql > /dev/null
+	psql-f sql/copyTables.sql > /dev/null
 
 	# Refresh the materialized views
 	echo Update views ...
-	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateMatViews.sql > /dev/null
+	psql-f sql/updateMatViews.sql > /dev/null
 
 	# rerun to fill all empty fields +  associatedStreets
 	./reimport.sh full
 
 	# truncate delete tables
 	echo Truncate delete_ tables ...
-	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/truncateDeleteTables.sql > /dev/null
+	psql-f sql/truncateDeleteTables.sql > /dev/null
 
 	# add one to seq number and update time
 	echo Update time on database ...
-	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/updateTime.sql > /dev/null
+	psql-f sql/updateTime.sql > /dev/null
 
 	echo Finish
 else

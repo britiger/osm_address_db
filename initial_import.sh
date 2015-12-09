@@ -3,49 +3,51 @@
 . ./config 
 
 # mapping user and password for osm2pgsql
-export pguser=$username
-export pgpass=$password
-export PGPASS=$password
+export PGHOST=$pghost
+export PGPORT=$pgport
+export PGUSER=$username
+export PGPASSWORD=$password
+export PGDATABASE=$database
 
 # delete old data
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/dropTables.sql > /dev/null
+psql -f sql/dropTables.sql > /dev/null
 
 # import data into database
-osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -d $database -S others/import.style -U $username $o2pParameters $import_file
+osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database -S others/import.style -U $username $o2pParameters $import_file
 
 # create additional fields for later updates (timestamps-fields)
 echo Creating timestamp fileds ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/addTimestamp.sql > /dev/null
+psql -f sql/addTimestamp.sql > /dev/null
 
 # create delete-tables
 echo Creating delete-tables ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createDeleteTables.sql > /dev/null
+psql -f sql/createDeleteTables.sql > /dev/null
 
 # create trigger for delete-tables
 echo Creating delete triggers ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createDeleteTriggers.sql > /dev/null
+psql -f sql/createDeleteTriggers.sql > /dev/null
 
 # create functions
 echo Creating functions ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createFunctions.sql > /dev/null
+psql -f sql/createFunctions.sql > /dev/null
 
 # create view for later processing
 echo Creating import views ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createImportViews.sql > /dev/null
+psql -f sql/createImportViews.sql > /dev/null
 
 # call reimport.sh to create import-schema
 ./reimport.sh
 
 # TODO: get number from everywhere
 echo Set OSC number ...
-psql "dbname=$database host=$pghost user=$username password=$password port=5432" -f sql/createConfigOSC.sql > /dev/null
+psql -f sql/createConfigOSC.sql > /dev/null
 
 if [ $updateStartNumber -ne 999999999 ]
 then
-	psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'UPDATE config_values SET val='$updateStartNumber' WHERE "key"='\''next_osc'\'';' > /dev/null
+	psql -t -c 'UPDATE config_values SET val='$updateStartNumber' WHERE "key"='\''next_osc'\'';' > /dev/null
 fi
 
 if [ $updatePath != 'none' ]
 then
-        psql "dbname=$database host=$pghost user=$username password=$password port=5432" -t -c 'UPDATE config_values SET val='\'''$updatePath''\'' WHERE "key"='\''update_url'\'';' > /dev/null
+        psql -t -c 'UPDATE config_values SET val='\'''$updatePath''\'' WHERE "key"='\''update_url'\'';' > /dev/null
 fi

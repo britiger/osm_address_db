@@ -5,6 +5,7 @@ username=osm
 password=osm
 database=osm
 pghost=127.0.0.1
+pgport=5432
 
 o2pProcesses=2
 o2pCache=3500MB
