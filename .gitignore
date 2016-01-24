@@ -2,5 +2,6 @@
 *.pbf
 *.bz2
 *.osm
+*.md5
 config
 tmp/*

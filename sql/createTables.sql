@@ -6,7 +6,6 @@ DROP SCHEMA IF EXISTS  import CASCADE;
 CREATE SCHEMA import;
 
 -- osm_admin
-
 CREATE TABLE import.osm_admin
 (
   osm_id bigint,

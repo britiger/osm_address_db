@@ -39,6 +39,11 @@ GROUP BY osm_id, name, admin_level;
 
 CREATE INDEX osm_admin_city_osm_id_idx ON import.osm_admin_city (osm_id);
 
+-- Update Statistics
+SET client_min_messages TO ERROR; -- ignore warnings of skipped tables
+ANALYSE;
+SET client_min_messages TO WARNING;
+
 -- All postcodes within a city
 CREATE MATERIALIZED VIEW import.city_postcode
 AS SELECT
