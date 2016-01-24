@@ -83,22 +83,22 @@ then
 
 	# copy new entries
 	echo Copy new elements ...
-	psql-f sql/copyTables.sql > /dev/null
+	psql -f sql/copyTables.sql > /dev/null
 
 	# Refresh the materialized views
 	echo Update views ...
-	psql-f sql/updateMatViews.sql > /dev/null
+	psql -f sql/updateMatViews.sql > /dev/null
 
 	# rerun to fill all empty fields +  associatedStreets
 	./reimport.sh full
 
 	# truncate delete tables
 	echo Truncate delete_ tables ...
-	psql-f sql/truncateDeleteTables.sql > /dev/null
+	psql -f sql/truncateDeleteTables.sql > /dev/null
 
 	# add one to seq number and update time
 	echo Update time on database ...
-	psql-f sql/updateTime.sql > /dev/null
+	psql -f sql/updateTime.sql > /dev/null
 
 	echo Finish
 else
