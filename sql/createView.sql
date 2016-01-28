@@ -47,8 +47,8 @@ SET client_min_messages TO WARNING;
 -- All postcodes within a city
 CREATE MATERIALIZED VIEW import.city_postcode
 AS SELECT
-city.name,
-city.osm_id,
+city.name AS city_name,
+city.osm_id AS city_osm_id,
 postcode.postal_code AS postal_code,
 postcode.osm_id AS postal_osm_id
 FROM (import.osm_admin_city AS city_list LEFT JOIN 
