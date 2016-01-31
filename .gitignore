@@ -3,5 +3,6 @@
 *.bz2
 *.osm
 *.md5
+country_files/list.xml
 config
 tmp/*

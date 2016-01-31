@@ -16,4 +16,6 @@ Programs
  - initial_import.sh - This is the main script it reads the given data file (see config file)
  - update_import.sh - This script reads the url and sequence number from the database. After starting it checks the given url for new updates and load this file, import the data into the database. After importing using osm2pgsql it rebuilds the existing address database.
  - reimport.sh - If you you have modified the osm2pgsql data you need to reimport the data into the address db structure. This script is called by update_import.sh autocratically. 
+ - fetch_country_list.sh - Load the list of all country polygons into the directory country_files/ using Overpass-API
+ - fetch_countries.sh - Load all osm files of counties defined in the file itself (required python)
  - import_countries.sh - Imports all *.osm files from the country_files directory. The files have to contain the relations of a country. You will need this if you import small extracts to have these polygons for fill all empty addr:country tags.
