@@ -8,7 +8,8 @@ CREATE OR REPLACE VIEW osm_admin AS
 	SELECT osm_id, name, admin_level::integer, "ISO3166-1", way AS geometry, last_update
 	FROM planet_osm_polygon
 	WHERE admin_level IN('1','2','3','4','5','6','7','8','9','10','11','12','13')
-		AND name IS NOT NULL;
+		AND name IS NOT NULL
+		AND boundary='administrative';
 
 -- osm_places
 CREATE OR REPLACE VIEW osm_places AS
