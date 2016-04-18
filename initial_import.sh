@@ -10,44 +10,59 @@ export PGPASSWORD=$password
 export PGDATABASE=$database
 
 # delete old data
-psql -f sql/dropTables.sql > /dev/null
+echo Delete old data ...
+rm -f tmp/*
+psql -f sql/planetDropAllTables.sql > /dev/null
+
+# TODO: Importing all countires
+#echo Importing country borders ...
+#countryList=`ls country_files/*.osm`
+#for country in $countryList
+#do
+#	echo Importing country-file $country ...
+#	# import data into database
+#	osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database \
+#		-S others/import.style -U $username $o2pParameters $country
+#done
 
 # import data into database
-osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database -S others/import.style -U $username $o2pParameters $import_file
+echo Import data from $import_file ...
+osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database \
+	-S others/import.style -U $username $o2pParameters $import_file
 
 # create additional fields for later updates (timestamps-fields)
-echo Creating timestamp fileds ...
-psql -f sql/addTimestamp.sql > /dev/null
+echo Creating timestamp fields ...
+psql -f sql/planetAddTimestamp.sql > /dev/null
 
 # create delete-tables
 echo Creating delete-tables ...
-psql -f sql/createDeleteTables.sql > /dev/null
+psql -f sql/planetCreateDeleteTables.sql > /dev/null
 
 # create trigger for delete-tables
 echo Creating delete triggers ...
-psql -f sql/createDeleteTriggers.sql > /dev/null
+psql -f sql/planetCreateDeleteTriggers.sql > /dev/null
 
 # create functions
 echo Creating functions ...
 psql -f sql/createFunctions.sql > /dev/null
 
 # create view for later processing
-echo Creating import views ...
-psql -f sql/createImportViews.sql > /dev/null
+echo Creating views on imported tables ...
+psql -f sql/planetCreateViews.sql > /dev/null
 
-# call reimport.sh to create import-schema
-./reimport.sh
+echo Create config values ...
+psql -f sql/planetCreateConfigValues.sql > /dev/null
 
-# TODO: get number from everywhere
-echo Set OSC number ...
-psql -f sql/createConfigOSC.sql > /dev/null
+echo Building up schema import ...
 
-if [ $updateStartNumber -ne 999999999 ]
-then
-	psql -t -c 'UPDATE config_values SET val='$updateStartNumber' WHERE "key"='\''next_osc'\'';' > /dev/null
-fi
+# create Tables for Initial import-schema including drop old schema
+echo " - Tables"
+psql -f sql/importCreateTables.sql > /dev/null
 
-if [ $updatePath != 'none' ]
-then
-        psql -t -c 'UPDATE config_values SET val='\'''$updatePath''\'' WHERE "key"='\''update_url'\'';' > /dev/null
-fi
+# create Views for import-schema
+echo " - Views"
+psql -f sql/importCreateViews.sql > /dev/null
+
+echo Starting update osm last diff and importing data ...
+./osmupdate.sh first
+

@@ -1,0 +1,6 @@
+here you can put osmupdate and osmconvert.
+these tools are needed for initial import and update. If doesn't exists osmupdate.sh will try to compile it.
+
+For more information:
+  - http://wiki.openstreetmap.org/wiki/Osmupdate
+  - http://wiki.openstreetmap.org/wiki/Osmconvert

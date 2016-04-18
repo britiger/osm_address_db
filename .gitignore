@@ -6,3 +6,5 @@
 country_files/list.xml
 config
 tmp/*
+tools/*
+flat-nodes.db

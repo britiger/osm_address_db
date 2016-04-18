@@ -59,7 +59,7 @@ CREATE OR REPLACE VIEW osm_roads AS
 		UNION
 	SELECT osm_id, name, highway, "addr:suburb", way AS geometry, max(last_update) AS last_update
 	FROM planet_osm_polygon
-	WHERE name IS NOT NULL AND highway IS NOT NULL AND osm_id > 0
+	WHERE name IS NOT NULL AND highway IS NOT NULL
 	GROUP BY osm_id, name, highway, "addr:suburb", way;
 
 -- delete_polygon_point
