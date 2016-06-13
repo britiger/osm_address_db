@@ -85,3 +85,72 @@ $BODY$
     END;
 $BODY$
 LANGUAGE plpgsql;
+
+-- function for rating housenumbers for sorting
+﻿CREATE OR REPLACE FUNCTION sort_housenumber(housenumber text) 
+RETURNS bigint AS
+$BODY$
+DECLARE
+	outnumber bigint := 0;
+	number_part text;
+	num text;
+	multi_factor bigint := 1000000;
+BEGIN
+	num := housenumber;
+	num := trim(leading ' ' from num);
+
+	-- split first part full number from input
+	number_part := substring(num from '^\d+');
+	outnumber := number_part::bigint * multi_factor; 
+	multi_factor := multi_factor / 1000;
+	num := substr(num, length(number_part)+1);
+	num := trim(leading ' ' from num);
+	IF length(num) < 1 THEN
+		RETURN outnumber; 
+	END IF;
+	
+	-- extract partnums (1/2, 1/3, 2/3)
+	number_part := substring(num from '^1/\d+');
+	IF number_part IS NOT NULL THEN
+		num := substr(num, length(number_part)+1);
+		num := trim(leading ' ' from num);
+		number_part := substr(number_part, 3);
+		outnumber := outnumber + number_part::bigint * multi_factor; 
+		multi_factor := multi_factor / 1000;
+		
+		IF length(num) < 1 THEN
+			RETURN outnumber; 
+		END IF;
+	END IF;
+
+	-- extract alphabet (a,b,A,B)
+	number_part := substring(num from '^[a-zA-Z]+');
+	IF number_part IS NOT NULL THEN
+		outnumber := outnumber + (ascii(upper(number_part))-64) * multi_factor;
+		multi_factor := multi_factor / 1000;
+		num := substr(num, length(number_part)+1);
+		num := trim(leading ' ' from num);
+
+		IF length(num) < 1 THEN
+			RETURN outnumber; 
+		END IF;
+	END IF;
+
+	-- is range of number
+	IF substr(num, 1, 1) is not distinct from '-' 
+	OR substr(num, 1, 1) is not distinct from ';' 
+	OR substr(num, 1, 1) is not distinct from ',' 
+	OR substr(num, 1, 1) is not distinct from '+'
+	OR substr(num, 1, 1) is not distinct from '/' THEN
+		outnumber := outnumber + (sort_housenumber(substr(num, 2)) / multi_factor);
+		RETURN outnumber; 
+	END IF;
+
+	RAISE NOTICE 'INCOMPLETE RESULT: % of % (REST: %)',outnumber,housenumber,num;
+
+	RETURN outnumber; 
+END;
+$BODY$ 
+IMMUTABLE
+RETURNS NULL ON NULL INPUT
+LANGUAGE plpgsql;
