@@ -9,6 +9,13 @@ export PGUSER=$username
 export PGPASSWORD=$password
 export PGDATABASE=$database
 
+# Check already running
+if [ "$(pidof -x $(basename $0))" != $$ ]
+then
+        echo "Update is already running"
+        exit
+fi
+
 # Check Parameter
 if [ $# -lt 1 ] || [ "$1" != "full" -a "$1" != "address" -a "$1" != "first" ]
 then
