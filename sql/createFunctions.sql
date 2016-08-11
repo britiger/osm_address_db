@@ -87,7 +87,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 -- function for rating housenumbers for sorting
-﻿CREATE OR REPLACE FUNCTION sort_housenumber(housenumber text) 
+CREATE OR REPLACE FUNCTION sort_housenumber(housenumber text) 
 RETURNS bigint AS
 $BODY$
 DECLARE
