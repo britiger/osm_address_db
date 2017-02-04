@@ -68,6 +68,8 @@ fi
 
 if [ "$1" = "first" ] || [ -f tmp/update.osc.gz ]
 then
+	echo Disable autovacuum ...
+	psql -f sql/disableVacuum.sql > /dev/null 2>&1
 
 	if [ "$1" = "first" ]
 	then
@@ -133,6 +135,8 @@ then
 	psql -f sql/planetUpdateConfigTime.sql > /dev/null
 	echo Vacuum on schema import ...
 	psql -f sql/importVacuumTables.sql > /dev/null
+	echo Enable autovacuum ...
+	psql -f sql/enableVacuum.sql > /dev/null 2>&1
 else
 	echo No update needed.
 fi
