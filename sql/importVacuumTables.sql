@@ -2,11 +2,11 @@
 SET client_min_messages TO WARNING;
 
 -- Vacuum tables in import schema
-VACUUM ANALYSE import.osm_admin;
-VACUUM ANALYSE import.osm_places;
-VACUUM ANALYSE import.osm_postcode;
-VACUUM ANALYSE import.osm_roads;
-VACUUM ANALYSE import.osm_addresses;
+ANALYSE import.osm_admin;
+ANALYSE import.osm_places;
+ANALYSE import.osm_postcode;
+ANALYSE import.osm_roads;
+ANALYSE import.osm_addresses;
 
 -- Update statistis of all views
 ANALYSE import.osm_admin_hierarchy;

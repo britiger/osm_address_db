@@ -28,6 +28,9 @@ export PATH=`pwd`/tools/:$PATH
 oupdate=`which osmupdate &> /dev/null`
 oconvert=`which osmconvert &> /dev/null`
 
+# Creating tmp-directory for updates
+mkdir -p tmp
+
 # if not find compile
 if [ -z $oconvert ]
 then

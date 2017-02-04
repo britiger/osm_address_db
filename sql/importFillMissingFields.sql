@@ -8,7 +8,7 @@ FROM import.osm_postcode AS post
 WHERE "addr:postcode" IS NULL
   AND ST_WITHIN(addr.geometry, post.geometry);
 
-VACUUM ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses;
 
 -- Cityname
 SET from_collapse_limit = 1; -- needed for pgsql 9.5 to explicit join first
@@ -22,7 +22,7 @@ WHERE "addr:city" IS NULL
 
 SET from_collapse_limit = DEFAULT; -- reset planer value to default
 
-VACUUM ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses;
 
 -- Country
 UPDATE import.osm_addresses AS addr
@@ -32,4 +32,4 @@ FROM (SELECT * FROM import.osm_admin WHERE admin_level=2) AS country
 WHERE "addr:country" IS NULL
   AND ST_WITHIN(addr.geometry, country.geometry);
 
-VACUUM ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses;

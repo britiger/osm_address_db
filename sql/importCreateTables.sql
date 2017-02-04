@@ -6,7 +6,7 @@ DROP SCHEMA IF EXISTS  import CASCADE;
 CREATE SCHEMA import;
 
 -- osm_admin
-CREATE UNLOGGED TABLE import.osm_admin
+CREATE TABLE import.osm_admin
 (
   osm_id bigint,
   name text,
@@ -17,7 +17,7 @@ CREATE UNLOGGED TABLE import.osm_admin
 );
 
 -- osm_postcode
-CREATE UNLOGGED TABLE import.osm_postcode
+CREATE TABLE import.osm_postcode
 (
   osm_id bigint,
   postal_code text,
@@ -26,7 +26,7 @@ CREATE UNLOGGED TABLE import.osm_postcode
 );
 
 -- osm_places
-CREATE UNLOGGED TABLE import.osm_places
+CREATE TABLE import.osm_places
 (
   osm_id bigint,
   class text,
@@ -38,7 +38,7 @@ CREATE UNLOGGED TABLE import.osm_places
 );
 
 -- osm_roads
-CREATE UNLOGGED TABLE import.osm_roads
+CREATE TABLE import.osm_roads
 (
   osm_id bigint,
   name text,
@@ -49,7 +49,7 @@ CREATE UNLOGGED TABLE import.osm_roads
 );
 
 -- osm_addresses
-CREATE UNLOGGED TABLE import.osm_addresses
+CREATE TABLE import.osm_addresses
 (
   osm_id bigint,
   class text,

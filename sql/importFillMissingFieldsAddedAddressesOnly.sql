@@ -9,7 +9,7 @@ WHERE "addr:postcode" IS NULL
   AND ST_WITHIN(addr.geometry, post.geometry)
   AND addr.last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp;
 
-VACUUM ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses;
 
 -- Cityname
 SET from_collapse_limit = 1; -- needed for pgsql 9.5 to explicit join first
@@ -24,7 +24,7 @@ WHERE "addr:city" IS NULL
 
 SET from_collapse_limit = DEFAULT; -- reset planer value to default
 
-VACUUM ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses;
 
 -- Country
 UPDATE import.osm_addresses AS addr
@@ -35,4 +35,4 @@ WHERE "addr:country" IS NULL
   AND ST_WITHIN(addr.geometry, country.geometry)
   AND addr.last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp;
 
-VACUUM ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses;

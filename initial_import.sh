@@ -63,6 +63,6 @@ psql -f sql/importCreateTables.sql > /dev/null
 echo " - Views"
 psql -f sql/importCreateViews.sql > /dev/null
 
-echo Starting update osm last diff and importing data ...
+echo Starting importing data ...
 ./osmupdate.sh first
 
