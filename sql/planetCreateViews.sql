@@ -54,12 +54,12 @@ CREATE OR REPLACE VIEW osm_associated AS
 CREATE OR REPLACE VIEW osm_roads AS
 	SELECT osm_id, name, highway, "addr:suburb", way AS geometry, max(last_update) AS last_update
 	FROM planet_osm_line
-	WHERE name IS NOT NULL AND highway IS NOT NULL
+	WHERE name IS NOT NULL AND highway IS NOT NULL AND highway NOT IN('platform', 'bus_stop', 'proposed')
 	GROUP BY osm_id, name, highway, "addr:suburb", way
 		UNION
 	SELECT osm_id, name, highway, "addr:suburb", way AS geometry, max(last_update) AS last_update
 	FROM planet_osm_polygon
-	WHERE name IS NOT NULL AND highway IS NOT NULL
+	WHERE name IS NOT NULL AND highway IS NOT NULL AND highway NOT IN('platform', 'bus_stop', 'proposed')
 	GROUP BY osm_id, name, highway, "addr:suburb", way;
 
 -- delete_polygon_point
