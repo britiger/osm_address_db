@@ -5,7 +5,7 @@ SET client_min_messages TO WARNING;
 CREATE OR REPLACE VIEW osm_associated_with_street AS
 SELECT osm_id,
 	CASE WHEN name IS NULL THEN (SELECT name FROM osm_roads AS roads WHERE roads.osm_id=asso.street LIMIT 1) ELSE name END AS name,
-	house_polygon, house_point, last_update
+	house_polygon, house_point
 FROM osm_associated AS asso
 WHERE house_polygon IS NOT NULL OR house_point IS NOT NULL;
 
@@ -18,4 +18,4 @@ WHERE asso.name IS NOT NULL AND "addr:street" IS NULL
   AND ( (addr.class='point' AND addr.osm_id=ANY(asso.house_point)) OR
         (addr.class='polygon' AND addr.osm_id=ANY(asso.house_polygon)) );
 
-VACUUM ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses;

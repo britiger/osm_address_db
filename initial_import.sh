@@ -9,6 +9,9 @@ export PGUSER=$username
 export PGPASSWORD=$password
 export PGDATABASE=$database
 
+# set tool path fot custom osm2pgsql
+export PATH=`pwd`/tools/:$PATH
+
 # delete old data
 echo Delete old data ...
 rm -f tmp/*
@@ -33,18 +36,14 @@ osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -
 # disable Vaccum
 psql -f sql/disableVacuum.sql > /dev/null 2>&1
 
-# create additional fields for later updates (timestamps-fields)
-echo Creating timestamp fields ...
-psql -f sql/planetAddTimestamp.sql > /dev/null
-
-# create delete-tables
-echo Creating delete-tables ...
-psql -f sql/planetCreateDeleteTables.sql > /dev/null
+# create update tables
+echo Creating update tables ...
 psql -f sql/disableVacuum.sql > /dev/null 2>&1
+psql -f sql/planetCreateUpdateTables.sql > /dev/null
 
-# create trigger for delete-tables
-echo Creating delete triggers ...
-psql -f sql/planetCreateDeleteTriggers.sql > /dev/null
+# create trigger for update tables
+echo Creating update triggers ...
+psql -f sql/planetCreateUpdateTriggers.sql > /dev/null
 
 # create functions
 echo Creating functions ...

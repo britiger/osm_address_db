@@ -23,6 +23,8 @@ CREATE INDEX IF NOT EXISTS osm_addresses_source_addr_postcode_idx ON import.osm_
 CREATE INDEX IF NOT EXISTS osm_addresses_source_addr_suburb_idx ON import.osm_addresses ("source:addr:suburb");
 CREATE INDEX IF NOT EXISTS osm_addresses_source_addr_street_idx ON import.osm_addresses ("source:addr:street");
 
+CREATE INDEX IF NOT EXISTS osm_addresses_uptodate_idx ON import.osm_addresses (uptodate) WHERE NOT uptodate;
+
 -- places
 CREATE INDEX IF NOT EXISTS osm_places_geom ON import.osm_places USING gist (geometry);
 CREATE INDEX IF NOT EXISTS osm_places_osm_id_idx ON import.osm_places USING btree (osm_id);

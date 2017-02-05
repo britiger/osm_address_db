@@ -12,8 +12,7 @@ CREATE TABLE import.osm_admin
   name text,
   admin_level integer,
   "ISO3166-1" text,
-  geometry geometry,
-  last_update timestamp(0) with time zone
+  geometry geometry
 );
 
 -- osm_postcode
@@ -21,8 +20,7 @@ CREATE TABLE import.osm_postcode
 (
   osm_id bigint,
   postal_code text,
-  geometry geometry,
-  last_update timestamp(0) with time zone
+  geometry geometry
 );
 
 -- osm_places
@@ -33,8 +31,7 @@ CREATE TABLE import.osm_places
   name text,
   type text,
   population bigint,
-  geometry geometry,
-  last_update timestamp(0) with time zone
+  geometry geometry
 );
 
 -- osm_roads
@@ -44,8 +41,7 @@ CREATE TABLE import.osm_roads
   name text,
   highway text,
   "addr:suburb" text,
-  geometry geometry,
-  last_update timestamp(0) with time zone
+  geometry geometry
 );
 
 -- osm_addresses
@@ -70,6 +66,6 @@ CREATE TABLE import.osm_addresses
   "source:addr:hamlet" bigint,
   "source:addr:street" bigint,
   geometry geometry,
-  last_update timestamp(0) with time zone
+  uptodate boolean DEFAULT FALSE
 );
 

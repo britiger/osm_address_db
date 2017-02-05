@@ -32,4 +32,8 @@ FROM (SELECT * FROM import.osm_admin WHERE admin_level=2) AS country
 WHERE "addr:country" IS NULL
   AND ST_WITHIN(addr.geometry, country.geometry);
 
+UPDATE import.osm_addresses AS addr
+   SET uptodate=TRUE
+WHERE NOT uptodate;
+
 ANALYSE import.osm_addresses;

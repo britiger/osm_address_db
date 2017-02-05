@@ -7,7 +7,7 @@ UPDATE import.osm_addresses AS addr
 FROM import.osm_postcode AS post
 WHERE "addr:postcode" IS NULL
   AND ST_WITHIN(addr.geometry, post.geometry)
-  AND addr.last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp;
+  AND NOT uptodate;
 
 ANALYSE import.osm_addresses;
 
@@ -20,7 +20,7 @@ FROM (import.osm_admin_city AS city_list LEFT JOIN
 	 import.osm_admin AS city ON city.osm_id=city_list.osm_id)
 WHERE "addr:city" IS NULL
   AND ST_WITHIN(addr.geometry, city.geometry)
-  AND addr.last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp;
+  AND NOT uptodate;
 
 SET from_collapse_limit = DEFAULT; -- reset planer value to default
 
@@ -33,6 +33,10 @@ UPDATE import.osm_addresses AS addr
 FROM (SELECT * FROM import.osm_admin WHERE admin_level=2) AS country
 WHERE "addr:country" IS NULL
   AND ST_WITHIN(addr.geometry, country.geometry)
-  AND addr.last_update>(SELECT val FROM config_values WHERE key='last_update')::timestamp;
+  AND NOT uptodate;
+
+UPDATE import.osm_addresses AS addr
+   SET uptodate=TRUE
+WHERE NOT uptodate;
 
 ANALYSE import.osm_addresses;
