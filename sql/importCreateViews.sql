@@ -4,11 +4,11 @@ SET client_min_messages TO WARNING;
 -- Drop old views
 DROP MATERIALIZED VIEW IF EXISTS import.osm_admin_hierarchy CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.osm_admin_city CASCADE;
-DROP MATERIALIZED VIEW IF EXISTS import.city_suburb CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_postcode CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_roads CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_places CASCADE;
 
+DROP VIEW IF EXISTS import.city_suburb CASCADE;
 DROP VIEW IF EXISTS import.osm_addresses_distance CASCADE;
 
 -- Creating views in final import schema
@@ -58,18 +58,15 @@ WHERE ST_INTERSECTS(city.geometry, postcode.geometry)
 AND NOT ST_Touches(city.geometry, postcode.geometry);
 
 -- List of Suburbs by cities
-CREATE MATERIALIZED VIEW import.city_suburb
-AS SELECT
-city.osm_id AS city_osm_id,
-city.name AS city_name,
-suburb.name AS suburb_name,
-suburb.osm_id AS suburb_osm_id,
-suburb.admin_level AS suburb_admin_level
-FROM import.osm_admin AS suburb,
-(import.osm_admin_city AS city_list LEFT JOIN 
-import.osm_admin AS city ON city.osm_id=city_list.osm_id)
-WHERE suburb.admin_level>8 AND
-ST_WITHIN(suburb.geometry, city.geometry);
+CREATE VIEW import.city_suburb 
+AS SELECT city.osm_id AS city_osm_id,
+    city.name AS city_name,
+    hier.small_name AS suburb_name,
+    hier.small_osm_id AS suburb_osm_id,
+    hier.small_admin_level AS suburb_admin_level
+   FROM import.osm_admin_hierarchy hier,
+    import.osm_admin_city city
+  WHERE hier.big_osm_id=city.osm_id;
 
 -- All Roads within a city
 CREATE MATERIALIZED VIEW import.city_roads

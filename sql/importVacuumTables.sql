@@ -11,7 +11,6 @@ ANALYSE import.osm_addresses;
 -- Update statistis of all views
 ANALYSE import.osm_admin_hierarchy;
 ANALYSE import.osm_admin_city;
-ANALYSE import.city_suburb;
 ANALYSE import.city_postcode;
 ANALYSE import.city_roads;
 ANALYSE import.city_places;
