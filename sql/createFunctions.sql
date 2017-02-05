@@ -24,6 +24,8 @@ $BODY$
         RETURN NULL;
     END;
 $BODY$
+IMMUTABLE
+PARALLEL SAFE
 LANGUAGE plpgsql;
 
 -- returns all elements of a specific role and type (role, type(way, polygon, point), member)
@@ -56,6 +58,8 @@ $BODY$
 	END IF;
     END;
 $BODY$
+IMMUTABLE
+PARALLEL SAFE
 LANGUAGE plpgsql;
 
 -- returns first element of a specific role and type (role, type(way, polygon, point), member)
@@ -84,6 +88,8 @@ $BODY$
 	RETURN NULL;
     END;
 $BODY$
+IMMUTABLE
+PARALLEL SAFE
 LANGUAGE plpgsql;
 
 -- function for rating housenumbers for sorting
@@ -152,5 +158,6 @@ BEGIN
 END;
 $BODY$ 
 IMMUTABLE
+PARALLEL SAFE
 RETURNS NULL ON NULL INPUT
 LANGUAGE plpgsql;
