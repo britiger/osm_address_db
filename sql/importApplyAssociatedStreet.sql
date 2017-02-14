@@ -2,12 +2,16 @@
 SET client_min_messages TO WARNING;
 
 -- create View to fill street and filter useless tupels
-CREATE OR REPLACE VIEW osm_associated_with_street AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS osm_associated_with_street AS
 SELECT osm_id,
 	CASE WHEN name IS NULL THEN (SELECT name FROM osm_roads AS roads WHERE roads.osm_id=asso.street LIMIT 1) ELSE name END AS name,
 	house_polygon, house_point
 FROM osm_associated AS asso
-WHERE house_polygon IS NOT NULL OR house_point IS NOT NULL;
+WHERE house_polygon IS NOT NULL OR house_point IS NOT NULL
+WITH NO DATA;
+
+-- Update view
+REFRESH MATERIALIZED VIEW osm_associated_with_street;
 
 -- Update addresses
 UPDATE import.osm_addresses AS addr
