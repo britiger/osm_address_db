@@ -98,6 +98,7 @@ RETURNS bigint AS
 $BODY$
 DECLARE
 	outnumber bigint := 0;
+	retnumber bigint;
 	number_part text;
 	num text;
 	multi_factor bigint := 1000000;
@@ -115,7 +116,7 @@ BEGIN
 		RETURN outnumber; 
 	END IF;
 	
-	-- extract partnums (1/2, 1/3, 2/3)
+	-- extract partnums (1/2, 1/3)
 	number_part := substring(num from '^1/\d+');
 	IF number_part IS NOT NULL THEN
 		num := substr(num, length(number_part)+1);
@@ -148,7 +149,10 @@ BEGIN
 	OR substr(num, 1, 1) is not distinct from ',' 
 	OR substr(num, 1, 1) is not distinct from '+'
 	OR substr(num, 1, 1) is not distinct from '/' THEN
-		outnumber := outnumber + (sort_housenumber(substr(num, 2)) / multi_factor);
+		retnumber := sort_housenumber(substr(num, 2))::float/1000000 * multi_factor;
+		IF retnumber IS NOT NULL THEN
+			outnumber := outnumber + retnumber;
+		END IF;
 		RETURN outnumber; 
 	END IF;
 
