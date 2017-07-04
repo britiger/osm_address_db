@@ -8,3 +8,4 @@ REFRESH MATERIALIZED VIEW import.osm_admin_city;
 REFRESH MATERIALIZED VIEW import.city_postcode;
 REFRESH MATERIALIZED VIEW import.city_roads;
 REFRESH MATERIALIZED VIEW import.city_places;
+REFRESH MATERIALIZED VIEW import.osm_addresses_distance;

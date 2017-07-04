@@ -7,9 +7,9 @@ DROP MATERIALIZED VIEW IF EXISTS import.osm_admin_city CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_postcode CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_roads CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS import.city_places CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS import.osm_addresses_distance CASCADE;
 
 DROP VIEW IF EXISTS import.city_suburb CASCADE;
-DROP VIEW IF EXISTS import.osm_addresses_distance CASCADE;
 
 -- Creating views in final import schema
 
@@ -101,15 +101,19 @@ WHERE st_within(place.geometry, city.geometry)
 GROUP BY place.name, city.osm_id;
 
 -- VIEW for finding errors (Distance between addresses)
-CREATE OR REPLACE VIEW import.osm_addresses_distance AS 
-SELECT 	a.osm_id AS osm_id_first, a.class AS class_first, 
-	b.osm_id AS osm_id_second, b.class AS class_second, 
-	ST_DISTANCE(ST_CENTROID(a.geometry), ST_CENTROID(b.geometry)) AS distance
-FROM import.osm_addresses AS a, import.osm_addresses AS b
-WHERE a.osm_id<b.osm_id
-  AND a."addr:country" = b."addr:country"
-  AND a."addr:city" = b."addr:city"
-  AND a."addr:postcode" = b."addr:postcode"
-  AND a."addr:suburb" = b."addr:suburb"
-  AND a."addr:street" = b."addr:street"
-  AND a."addr:housenumber" = b."addr:housenumber";
+CREATE MATERIALIZED VIEW import.osm_addresses_distance AS 
+SELECT (a.osm_id || ';' || a.class) As osmIdA,
+	(b.osm_id || ';' || b.class) As osmIdB, 
+	ST_DISTANCE(ST_CENTROID(a.geometry), ST_CENTROID(b.geometry)) AS distance, 
+	a."addr:city", a."addr:street", a."addr:housenumber", a."addr:suburb", a."addr:postcode", 
+  a.geometry AS geometryA,
+  b.geometry AS geometryB
+FROM import.osm_addresses AS a,
+	import.osm_addresses AS b 
+WHERE a.osm_id<b.osm_id 
+  AND a."addr:city" = b."addr:city" 
+  AND a."addr:postcode" = b."addr:postcode" 
+  AND a."addr:suburb" = b."addr:suburb" 
+  AND a."addr:street" = b."addr:street" 
+  AND a."addr:housenumber" = b."addr:housenumber" 
+  AND ST_DISTANCE(ST_CENTROID(a.geometry), ST_CENTROID(b.geometry)) > 100;
