@@ -8,13 +8,13 @@ CREATE OR REPLACE FUNCTION update_line() RETURNS trigger AS
 $BODY$
 BEGIN
 	IF (TG_OP = 'DELETE') THEN
-		INSERT INTO update_line (osm_id, update_type) VALUES (OLD.osm_id, 'D');
+		INSERT INTO update_line (osm_id, update_type) VALUES (OLD.osm_id, 'D') ON CONFLICT DO NOTHING;
 		RETURN OLD;
 	ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO update_line (osm_id, update_type) VALUES (NEW.osm_id, 'U');
+		INSERT INTO update_line (osm_id, update_type) VALUES (NEW.osm_id, 'U') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO update_line (osm_id, update_type) VALUES (NEW.osm_id, 'I');
+		INSERT INTO update_line (osm_id, update_type) VALUES (NEW.osm_id, 'I') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	END IF;
 END
@@ -27,13 +27,13 @@ CREATE OR REPLACE FUNCTION update_nodes() RETURNS trigger AS
 $BODY$
 BEGIN
 	IF (TG_OP = 'DELETE') THEN
-		INSERT INTO update_nodes (osm_id, update_type) VALUES (OLD.id, 'D');
+		INSERT INTO update_nodes (osm_id, update_type) VALUES (OLD.id, 'D') ON CONFLICT DO NOTHING;
 		RETURN OLD;
 	ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO update_nodes (osm_id, update_type) VALUES (NEW.id, 'U');
+		INSERT INTO update_nodes (osm_id, update_type) VALUES (NEW.id, 'U') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO update_nodes (osm_id, update_type) VALUES (NEW.id, 'I');
+		INSERT INTO update_nodes (osm_id, update_type) VALUES (NEW.id, 'I') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	END IF;
 END
@@ -46,13 +46,13 @@ CREATE OR REPLACE FUNCTION update_point() RETURNS trigger AS
 $BODY$
 BEGIN
 	IF (TG_OP = 'DELETE') THEN
-		INSERT INTO update_point (osm_id, update_type) VALUES (OLD.osm_id, 'D');
+		INSERT INTO update_point (osm_id, update_type) VALUES (OLD.osm_id, 'D') ON CONFLICT DO NOTHING;
 		RETURN OLD;
 	ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO update_point (osm_id, update_type) VALUES (NEW.osm_id, 'U');
+		INSERT INTO update_point (osm_id, update_type) VALUES (NEW.osm_id, 'U') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO update_point (osm_id, update_type) VALUES (NEW.osm_id, 'I');
+		INSERT INTO update_point (osm_id, update_type) VALUES (NEW.osm_id, 'I') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	END IF;
 END
@@ -65,13 +65,13 @@ CREATE OR REPLACE FUNCTION update_polygon() RETURNS trigger AS
 $BODY$
 BEGIN
 	IF (TG_OP = 'DELETE') THEN
-		INSERT INTO update_polygon (osm_id, update_type) VALUES (OLD.osm_id, 'D');
+		INSERT INTO update_polygon (osm_id, update_type) VALUES (OLD.osm_id, 'D') ON CONFLICT DO NOTHING;
 		RETURN OLD;
 	ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO update_polygon (osm_id, update_type) VALUES (NEW.osm_id, 'U');
+		INSERT INTO update_polygon (osm_id, update_type) VALUES (NEW.osm_id, 'U') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO update_polygon (osm_id, update_type) VALUES (NEW.osm_id, 'I');
+		INSERT INTO update_polygon (osm_id, update_type) VALUES (NEW.osm_id, 'I') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	END IF;
 END
@@ -84,13 +84,13 @@ CREATE OR REPLACE FUNCTION update_rels() RETURNS trigger AS
 $BODY$
 BEGIN
 	IF (TG_OP = 'DELETE') THEN
-		INSERT INTO update_rels (osm_id, update_type) VALUES (OLD.id, 'D');
+		INSERT INTO update_rels (osm_id, update_type) VALUES (OLD.id, 'D') ON CONFLICT DO NOTHING;
 		RETURN OLD;
 	ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO update_rels (osm_id, update_type) VALUES (NEW.id, 'U');
+		INSERT INTO update_rels (osm_id, update_type) VALUES (NEW.id, 'U') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO update_rels (osm_id, update_type) VALUES (NEW.id, 'I');
+		INSERT INTO update_rels (osm_id, update_type) VALUES (NEW.id, 'I') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	END IF;
 END
@@ -103,13 +103,13 @@ CREATE OR REPLACE FUNCTION update_roads() RETURNS trigger AS
 $BODY$
 BEGIN
 	IF (TG_OP = 'DELETE') THEN
-		INSERT INTO update_roads (osm_id, update_type) VALUES (OLD.osm_id, 'D');
+		INSERT INTO update_roads (osm_id, update_type) VALUES (OLD.osm_id, 'D') ON CONFLICT DO NOTHING;
 		RETURN OLD;
 	ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO update_roads (osm_id, update_type) VALUES (NEW.osm_id, 'U');
+		INSERT INTO update_roads (osm_id, update_type) VALUES (NEW.osm_id, 'U') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO update_roads (osm_id, update_type) VALUES (NEW.osm_id, 'I');
+		INSERT INTO update_roads (osm_id, update_type) VALUES (NEW.osm_id, 'I') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	END IF;
 END
@@ -122,13 +122,13 @@ CREATE OR REPLACE FUNCTION update_ways() RETURNS trigger AS
 $BODY$
 BEGIN
 	IF (TG_OP = 'DELETE') THEN
-		INSERT INTO update_ways (osm_id, update_type) VALUES (OLD.id, 'D');
+		INSERT INTO update_ways (osm_id, update_type) VALUES (OLD.id, 'D') ON CONFLICT DO NOTHING;
 		RETURN OLD;
 	ELSIF (TG_OP = 'UPDATE') THEN
-		INSERT INTO update_ways (osm_id, update_type) VALUES (NEW.id, 'U');
+		INSERT INTO update_ways (osm_id, update_type) VALUES (NEW.id, 'U') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	ELSIF (TG_OP = 'INSERT') THEN
-		INSERT INTO update_ways (osm_id, update_type) VALUES (NEW.id, 'I');
+		INSERT INTO update_ways (osm_id, update_type) VALUES (NEW.id, 'I') ON CONFLICT DO NOTHING;
 		RETURN NEW;
 	END IF;
 END

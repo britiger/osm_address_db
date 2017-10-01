@@ -85,6 +85,15 @@ then
 		mv tmp/update.osc.gz tmp/old_update.osc.gz
 	fi
 
+	if [ "$1" != "address" ]
+	then
+		# Restore data of last polygon updates
+		psql -f sql/planetPolyRestoreForFullUpdate.sql > /dev/null
+	else
+		# Save data of updates for polygon for next full update
+		psql -f sql/planetPolyMoveForFullUpdate.sql > /dev/null
+	fi
+
 	# Complete Update table data in schema import
 	echo Delete old elements ...
 	psql -f sql/importDeleteOldEntries.sql > /dev/null
