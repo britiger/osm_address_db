@@ -104,7 +104,7 @@ GROUP BY place.name, city.osm_id;
 CREATE MATERIALIZED VIEW import.osm_addresses_distance AS 
 SELECT (a.osm_id || ';' || a.class) As osmIdA,
 	(b.osm_id || ';' || b.class) As osmIdB, 
-	ST_DISTANCE(ST_CENTROID(a.geometry), ST_CENTROID(b.geometry)) AS distance, 
+	ST_DISTANCE(a.geometry, b.geometry) AS distance, 
 	a."addr:city", a."addr:street", a."addr:housenumber", a."addr:suburb", a."addr:postcode", 
   a.geometry AS geometryA,
   b.geometry AS geometryB
@@ -116,4 +116,4 @@ WHERE a.osm_id<b.osm_id
   AND a."addr:suburb" = b."addr:suburb" 
   AND a."addr:street" = b."addr:street" 
   AND a."addr:housenumber" = b."addr:housenumber" 
-  AND ST_DISTANCE(ST_CENTROID(a.geometry), ST_CENTROID(b.geometry)) > 100;
+  AND NOT ST_DWITHIN(a.geometry, b.geometry, 100);
