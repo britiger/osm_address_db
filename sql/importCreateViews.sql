@@ -112,8 +112,8 @@ FROM import.osm_addresses AS a,
 	import.osm_addresses AS b 
 WHERE a.osm_id<b.osm_id 
   AND a."addr:city" = b."addr:city" 
-  AND a."addr:postcode" = b."addr:postcode" 
-  AND a."addr:suburb" = b."addr:suburb" 
+  AND a."addr:postcode" IS NOT DISTINCT FROM b."addr:postcode" 
+  AND a."addr:suburb" IS NOT DISTINCT FROM b."addr:suburb" 
   AND a."addr:street" = b."addr:street" 
   AND a."addr:housenumber" = b."addr:housenumber" 
   AND NOT ST_DWITHIN(a.geometry, b.geometry, 100);
