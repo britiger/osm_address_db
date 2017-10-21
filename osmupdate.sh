@@ -23,32 +23,21 @@ then
 	exit
 fi
 
-# find osmconvert, osmupdate
+# find osmupdate
 export PATH=`pwd`/tools/:$PATH
 oupdate=`which osmupdate &> /dev/null`
-oconvert=`which osmconvert &> /dev/null`
 
 # Creating tmp-directory for updates
 mkdir -p tmp
 
 # if not find compile
-if [ -z $oconvert ]
-then
-	echo "Try to complie osmconvert ..."
-	wget -O - http://m.m.i24.cc/osmconvert.c | cc -x c - -lz -O3 -o tools/osmconvert
-	if [ ! -f tools/osmconvert ]
-	then
-		echo "Unable to compile osmconvert, please install osmconvert into \$PATH or tools/ directory."
-		exit
-	fi
-fi
 if [ -z $oupdate ]
 then
 	echo "Try to complie osmupdate ..."
 	wget -O - http://m.m.i24.cc/osmupdate.c | cc -x c - -o tools/osmupdate
-	if [ ! -f tools/osmconvert ]
+	if [ ! -f tools/osmupdate ]
 	then
-		echo "Unable to compile osmconvert, please install osmupdate into \$PATH or tools/ directory."
+		echo "Unable to compile osmupdate, please install osmupdate into \$PATH or in tools/ directory."
 		exit
 	fi
 fi
