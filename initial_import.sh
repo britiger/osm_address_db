@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . ./config 
+. ./tools/bash_functions.sh
 
 # mapping user and password for osm2pgsql
 export PGHOST=$pghost
@@ -13,7 +14,7 @@ export PGDATABASE=$database
 export PATH=`pwd`/tools/:$PATH
 
 # delete old data
-echo Delete old data ...
+echo_time "Delete old data ..."
 rm -f tmp/*
 psql -f sql/planetDropAllTables.sql > /dev/null
 
@@ -29,7 +30,7 @@ psql -f sql/planetDropAllTables.sql > /dev/null
 #done
 
 # import data into database
-echo Import data from $import_file ...
+echo_time "Import data from $import_file ..."
 osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database \
 	-S others/import.style -U $username $o2pParameters $import_file
 
@@ -37,36 +38,35 @@ osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -
 psql -f sql/disableVacuum.sql > /dev/null 2>&1
 
 # create update tables
-echo Creating update tables ...
+echo_time "Creating update tables ..."
 psql -f sql/disableVacuum.sql > /dev/null 2>&1
 psql -f sql/planetCreateUpdateTables.sql > /dev/null
 
 # create trigger for update tables
-echo Creating update triggers ...
+echo_time "Creating update triggers ..."
 psql -f sql/planetCreateUpdateTriggers.sql > /dev/null
 
 # create functions
-echo Creating functions ...
+echo_time "Creating functions ..."
 psql -f sql/createFunctions.sql > /dev/null
 
 # create view for later processing
-echo Creating views on imported tables ...
+echo_time "Creating views on imported tables ..."
 psql -f sql/planetCreateViews.sql > /dev/null
 
-echo Create config values ...
+echo_time "Create config values ..."
 psql -f sql/planetCreateConfigValues.sql > /dev/null
 
-echo Building up schema import ...
+echo_time "Building up schema import ..."
 
 # create Tables for Initial import-schema including drop old schema
-echo " - Tables"
+echo_time " - Tables"
 psql -f sql/importCreateTables.sql > /dev/null
 psql -f sql/disableVacuum.sql > /dev/null 2>&1
 
 # create Views for import-schema
-echo " - Views"
+echo_time " - Views"
 psql -f sql/importCreateViews.sql > /dev/null
 
-echo Starting importing data ...
+echo_time "Starting importing data ..."
 ./osmupdate.sh first
-
