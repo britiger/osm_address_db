@@ -1,7 +1,8 @@
 ﻿-- same as fillMissingFields.sql but with filter for new entries 
+SET from_collapse_limit = 1; -- needed for pgsql 9.5 to explicit join first
 
 -- Postcode
-UPDATE import.osm_addresses AS addr
+UPDATE import.osm_addresses_XX AS addr
    SET "addr:postcode" = post.postal_code,
        "source:addr:postcode" = post.osm_id
 FROM import.osm_postcode AS post
@@ -9,11 +10,10 @@ WHERE "addr:postcode" IS NULL
   AND ST_WITHIN(addr.geometry, post.geometry)
   AND NOT uptodate;
 
-ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses_XX;
 
 -- Cityname
-SET from_collapse_limit = 1; -- needed for pgsql 9.5 to explicit join first
-UPDATE import.osm_addresses AS addr
+UPDATE import.osm_addresses_XX AS addr
    SET "addr:city" = city.name,
        "source:addr:city" = city.osm_id
 FROM (import.osm_admin_city AS city_list LEFT JOIN 
@@ -22,12 +22,10 @@ WHERE "addr:city" IS NULL
   AND ST_WITHIN(addr.geometry, city.geometry)
   AND NOT uptodate;
 
-SET from_collapse_limit = DEFAULT; -- reset planer value to default
-
-ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses_XX;
 
 -- Country
-UPDATE import.osm_addresses AS addr
+UPDATE import.osm_addresses_XX AS addr
    SET "addr:country" = "ISO3166-1",
        "source:addr:country" = country.osm_id
 FROM (SELECT * FROM import.osm_admin WHERE admin_level=2) AS country
@@ -35,8 +33,10 @@ WHERE "addr:country" IS NULL
   AND ST_WITHIN(addr.geometry, country.geometry)
   AND NOT uptodate;
 
-UPDATE import.osm_addresses AS addr
+UPDATE import.osm_addresses_XX AS addr
    SET uptodate=TRUE
 WHERE NOT uptodate;
 
-ANALYSE import.osm_addresses;
+ANALYSE import.osm_addresses_XX;
+
+SET from_collapse_limit = DEFAULT; -- reset planer value to default

@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 . ./config
+. ./tools/bash_functions.sh
 
 # mapping user and password for osm2pgsql
 export PGHOST=$pghost
@@ -9,35 +10,38 @@ export PGUSER=$username
 export PGPASSWORD=$password
 export PGDATABASE=$database
 
+# Maximum number of partiton using in table osm_addresses
+partition_count=8
+
 # Check already running
 if [ "$(pidof -x $(basename $0))" != $$ ]
 then
-        echo "Update is already running"
+        echo_time "Update is already running"
         exit
 fi
 
 # Check Parameter
 if [ $# -lt 1 ] || [ "$1" != "full" -a "$1" != "address" -a "$1" != "first" ]
 then
-	echo "Parameter missing: use 'full' or 'address' "
+	echo_time "Parameter missing: use 'full' or 'address' "
 	exit
 fi
 
 # find osmupdate
 export PATH=`pwd`/tools/:$PATH
-oupdate=`which osmupdate &> /dev/null`
+oupdate=`which osmupdate 2> /dev/null`
 
 # Creating tmp-directory for updates
 mkdir -p tmp
 
 # if not find compile
-if [ -z $oupdate ]
+if [ -z "$oupdate" ]
 then
-	echo "Try to complie osmupdate ..."
+	echo_time "Try to complie osmupdate ..."
 	wget -O - http://m.m.i24.cc/osmupdate.c | cc -x c - -o tools/osmupdate
 	if [ ! -f tools/osmupdate ]
 	then
-		echo "Unable to compile osmupdate, please install osmupdate into \$PATH or in tools/ directory."
+		echo_time "Unable to compile osmupdate, please install osmupdate into \$PATH or in tools/ directory."
 		exit
 	fi
 fi
@@ -57,7 +61,7 @@ fi
 
 if [ "$1" = "first" ] || [ -f tmp/update.osc.gz ]
 then
-	echo Disable autovacuum ...
+	echo_time "Disable autovacuum ..."
 	psql -f sql/disableVacuum.sql > /dev/null 2>&1
 
 	if [ "$1" = "first" ]
@@ -84,17 +88,17 @@ then
 	fi
 
 	# Complete Update table data in schema import
-	echo Delete old elements ...
+	echo_time "Delete old elements ..."
 	psql -f sql/importDeleteOldEntries.sql > /dev/null
-	echo Copy new elements ...
+	echo_time "Copy new elements ..."
 	psql -f sql/copyTables.sql > /dev/null
-	echo Truncate update tables ...
+	echo_time "Truncate update tables ..."
 	psql -f sql/planetTruncateUpdateTables.sql > /dev/null
-	echo Vacuum on schema import ...
+	echo_time "Vacuum on schema import ..."
 	psql -f sql/importVacuumTables.sql > /dev/null
 
 	# apply assisciated Street relations
-	echo Apply relations type=associatedStreet ...
+	echo_time "Apply relations type=associatedStreet ..."
 	psql -f sql/importApplyAssociatedStreet.sql > /dev/null
 
 	# Update Database ... full | address | first
@@ -103,39 +107,54 @@ then
 		# Running full update
 
 		# this part is for first running after import
-		echo Checking indexes on schema import ...
+		echo_time "Checking indexes on schema import ..."
 		psql -f sql/importCreateIndex.sql > /dev/null
 
-		echo Refresh materialized views ...
+		echo_time "Checking indexes on address partition tables ..."
+		for i in $(seq -f "%02g" 0 $partition_count)
+		do
+			echo_time "  - For partition ${i}"
+			cat sql/importCreateIndexPartitions.sql | sed -e "s/XX/${i}/g" | psql > /dev/null
+		done
+
+		echo_time "Refresh materialized views ..."
 		psql -f sql/importUpdateMatViewsFull.sql > /dev/null
 
 		# fill missing fields like postcode, city and country
-		echo Fill postcode, city and country fields with surrounding polygons ...
-		psql -f sql/importFillMissingFields.sql > /dev/null
+		echo_time "Fill postcode, city and country fields with surrounding polygons ..."
+		for i in $(seq -f "%02g" 0 $partition_count)
+		do
+			execute_partition_script $i "sql/importFillMissingFields.sql" "Filling missing"&
+		done
+		wait
 		
 		psql -c 'UPDATE config_values SET "val"='\'${update_ts}\'' WHERE "key"='\''update_ts_address'\'';' > /dev/null
 		psql -c 'UPDATE config_values SET "val"='\'${update_ts}\'' WHERE "key"='\''update_ts_full'\'';' > /dev/null
 	else # address
 		# Running address update
 
-		echo Refresh materialized views ...
+		echo_time "Refresh materialized views ..."
 		psql -f sql/importUpdateMatViewsAddress.sql > /dev/null
 
 		# fill missing fields like postcode, city and country, only for updated addresses
-		echo Fill postcode, city and country fields with surrounding polygons ...
-		psql -f sql/importFillMissingFieldsAddedAddressesOnly.sql > /dev/null
+		echo_time "Fill postcode, city and country fields with surrounding polygons ..."
+		for i in $(seq -f "%02g" 0 $partition_count)
+		do
+			execute_partition_script $i "sql/importFillMissingFieldsAddedAddressesOnly.sql" "Fill missing"&
+		done
+		wait
 		
 		psql -c 'UPDATE config_values SET "val"='\'${update_ts}\'' WHERE "key"='\''update_ts_address'\'';' > /dev/null
 	fi
 
 	# update timestamp for find new elements
-	echo Update time on database ...
+	echo_time "Update time on database ..."
 	psql -f sql/planetUpdateConfigTime.sql > /dev/null
-	echo Vacuum on schema import ...
+	echo_time "Vacuum on schema import ..."
 	psql -f sql/importVacuumTables.sql > /dev/null
-	echo Enable autovacuum ...
+	echo_time "Enable autovacuum ..."
 	psql -f sql/enableVacuum.sql > /dev/null 2>&1
+	echo_time "Update completed."
 else
-	echo No update needed.
+	echo_time "No update needed."
 fi
-

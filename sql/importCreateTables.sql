@@ -44,7 +44,7 @@ CREATE TABLE import.osm_roads
   geometry geometry
 );
 
--- osm_addresses
+-- osm_addresses (as partition table)
 CREATE TABLE import.osm_addresses
 (
   osm_id bigint,
@@ -67,5 +67,24 @@ CREATE TABLE import.osm_addresses
   "source:addr:street" bigint,
   geometry geometry,
   uptodate boolean DEFAULT FALSE
-);
+) PARTITION BY RANGE (osm_id);
 
+-- Split into 9 Partitions
+CREATE TABLE import.osm_addresses_00 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (MINVALUE)   TO  (150000000);
+CREATE TABLE import.osm_addresses_01 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (150000001)  TO  (250000000);
+CREATE TABLE import.osm_addresses_02 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (250000001)  TO  (350000000);
+CREATE TABLE import.osm_addresses_03 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (350000001)  TO (1000000000);
+CREATE TABLE import.osm_addresses_04 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (1000000001) TO (2000000000);
+CREATE TABLE import.osm_addresses_05 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (2000000001) TO (3000000000);
+CREATE TABLE import.osm_addresses_06 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (3000000001) TO (4000000000);
+CREATE TABLE import.osm_addresses_07 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (4000000001) TO (5000000000);
+CREATE TABLE import.osm_addresses_08 PARTITION OF import.osm_addresses
+  FOR VALUES FROM (5000000001) TO (MAXVALUE);
