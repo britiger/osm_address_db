@@ -6,5 +6,7 @@
 country_files/list.xml
 config
 tmp/*
-tools/*
+tools/osm2pgsql
+tools/osmupdate
+tools/osmconvert
 flat-nodes.db
