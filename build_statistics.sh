@@ -17,7 +17,7 @@ logfile_name=statistics_`date '+%Y-%m-%d_%H-%M-%S'`.log
 
 # call sql for creating database
 echo_time "Check schema statistics and create table if nessesary ..."
-psql -f sql/statsCreateTable.sql &> /dev/null
+psql -f sql/statsCreateTable.sql > /dev/null
 
 # update current 
 echo_time "Update statistics ..."

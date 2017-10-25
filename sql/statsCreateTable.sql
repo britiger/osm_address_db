@@ -1,4 +1,5 @@
 -- Create schema and table for statistics
+SET client_min_messages TO WARNING;
 
 CREATE SCHEMA IF NOT EXISTS statistics;
 
