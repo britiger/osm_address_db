@@ -72,6 +72,13 @@ then
 		osmupdate -v $osmupdate_parameter $import_file tmp/update.osc.gz
 	fi
 fi
+# catch exit code of osmupdate
+RESULT=$?
+if [ $RESULT -ne 0 ]
+then
+	echo_time "osmupdate exits with error code $RESULT."
+	exit 1
+fi
 
 if [ "$1" = "first" ] || [ -f tmp/update.osc.gz ]
 then
@@ -86,6 +93,13 @@ then
 		# Import in DB
 		osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database \
 			-S others/import.style -U $username $o2pParameters tmp/update.osc.gz
+		# catch exit code of osm2pgsql
+		RESULT=$?
+		if [ $RESULT -ne 0 ]
+		then
+			echo_time "osm2pgsql exits with error code $RESULT."
+			exit 1
+		fi
 		psql -f sql/planetVacuumTables.sql > /dev/null
 
 		update_ts=`zcat tmp/update.osc.gz | xmllint --xpath 'string(/osmChange/@timestamp)' -`

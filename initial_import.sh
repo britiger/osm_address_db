@@ -40,6 +40,13 @@ psql -f sql/planetDropAllTables.sql > /dev/null
 echo_time "Import data from $import_file ..."
 osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database \
 	-S others/import.style -U $username $o2pParameters $import_file
+# catch exit code of osm2pgsql
+RESULT=$?
+if [ $RESULT -ne 0 ]
+then
+	echo_time "osm2pgsql exits with error code $RESULT."
+	exit 1
+fi
 
 # disable Vaccum
 psql -f sql/disableVacuum.sql > /dev/null 2>&1
