@@ -1,5 +1,5 @@
 -- This files contains some tables which usable for building web applications
-
+SET client_min_messages TO WARNING;
 -- Creating schema
 CREATE SCHEMA IF NOT EXISTS web;
 
