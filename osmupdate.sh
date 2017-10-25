@@ -87,8 +87,12 @@ then
 
 	if [ "$1" = "first" ]
 	then
-		# First run without update
-		update_ts="initial"
+		update_ts=`osmconvert ${import_file} 2> /dev/null | head | grep '<osm' | awk '{print $0"</osm>"}' | xmllint --xpath 'string(/osm/@timestamp)' -`
+		if [ -z "$update_ts" ]
+		then
+			# First run without update, date not found in import file
+			update_ts="initial"
+		fi
 	else
 		# Import in DB
 		osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database \
