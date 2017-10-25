@@ -4,7 +4,7 @@
 INSERT INTO statistics.road_addresses (osm_id, statedate, count_addresses, count_roads)
 VALUES (0,
 -- current update state
-    (SELECT val FROM config_values WHERE key='last_update')::timestamptz,
+    (SELECT val FROM config_values WHERE key='update_ts_address')::timestamptz,
 -- count all addresses
     (SELECT count(*)
     FROM
@@ -21,7 +21,7 @@ ON CONFLICT DO NOTHING;
 -- update all cities
 INSERT INTO statistics.road_addresses (osm_id, statedate, count_addresses, count_roads)
 SELECT oac.osm_id,
-(SELECT val FROM config_values WHERE key='last_update')::timestamptz statedate,
+(SELECT val FROM config_values WHERE key='update_ts_address')::timestamptz statedate,
 (SELECT count(*) FROM import.osm_addresses addr WHERE ST_INTERSECTS(addr.geometry,oa.geometry) ) count_addresses,
 (SELECT count(*) FROM import.city_roads WHERE city_osm_id=oac.osm_id) count_roads
 FROM import.osm_admin_city oac LEFT JOIN import.osm_admin oa ON oac.osm_id=oa.osm_id
