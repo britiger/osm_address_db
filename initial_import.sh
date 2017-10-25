@@ -10,6 +10,13 @@ export PGUSER=$username
 export PGPASSWORD=$password
 export PGDATABASE=$database
 
+# Creating nessesary directories
+mkdir -p tmp # for storing last update files
+mkdir -p log # logging
+
+# define logfile name
+logfile_name=import_`date '+%Y-%m-%d_%H-%M-%S'`.log
+
 # set tool path fot custom osm2pgsql
 export PATH=`pwd`/tools/:$PATH
 
@@ -70,3 +77,9 @@ psql -f sql/importCreateViews.sql > /dev/null
 
 echo_time "Starting importing data ..."
 ./osmupdate.sh first
+
+echo_time "Create tables and functions for web applications"
+psql -f sql/webTables.sql > /dev/null
+psql -f sql/webFunctions.sql > /dev/null
+
+echo_time "Initial import finished."

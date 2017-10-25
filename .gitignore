@@ -6,6 +6,7 @@
 country_files/list.xml
 config
 tmp/*
+log/*
 tools/osm2pgsql
 tools/osmupdate
 tools/osmconvert

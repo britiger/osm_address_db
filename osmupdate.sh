@@ -10,6 +10,9 @@ export PGUSER=$username
 export PGPASSWORD=$password
 export PGDATABASE=$database
 
+# define logfile name
+logfile_name=update_`date '+%Y-%m-%d_%H-%M-%S'`_$1.log
+
 # Maximum number of partiton using in table osm_addresses
 partition_count=8
 
