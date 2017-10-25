@@ -35,8 +35,14 @@ DECLARE need_update boolean;
 				AND ST_WITHIN(addr.geometry, city.geometry)
 				AND road_name IS NULL;
 				
+			-- UPDATE Statistics
+			INSERT INTO statistics.road_addresses (osm_id, last_update, count_errors)
+			VALUES ($1, update_ts, (SELECT count(address_osm_id) FROM web.invalid_addresses WHERE city_osm_id = $1 AND suburb_osm_id = 0))
+			ON CONFLICT ON CONSTRAINT road_addresses_pk
+  			DO UPDATE SET count_errors=EXCLUDED.count_errors;
+			  
 			-- UPDATE Status
-			UPDATE web.invalid_state SET last_update=update_ts WHERE city_osm_id = $1 AND suburb_osm_id = 0;
+			UPDATE web.invalid_state SET last_update=update_ts WHERE city_osm_id = $1 AND suburb_osm_id = 0;			
 		END IF;
 		RETURN need_update;
 	END;
