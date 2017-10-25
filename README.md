@@ -10,7 +10,7 @@ You also need the current osm2pgsql (0.92.0 tested, prior versions may work) for
 
 Before starting the import you need to copy the file config.sample into config. You have to create an empty database with postgis extension enabled. In the config file you have to set the database parameter and the source file of the osm pbf file. If you want to update the database in the future without a complete reimport you have to set the url and sequence of the diff files.
 
-You also need osmupdate. You can install this tool in your $PATH or in the tools/ directory. If osmupdate doesn't exists, the script will try to download and compile them using cc compiler.
+You also need osmupdate which need also osmconvert. You can install this tools in your $PATH or in the tools/ directory. If the tools don't exists, the script will try to download and compile them using cc compiler.
 
 Programs
 ========

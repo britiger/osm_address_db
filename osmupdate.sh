@@ -30,6 +30,7 @@ fi
 # find osmupdate
 export PATH=`pwd`/tools/:$PATH
 oupdate=`which osmupdate 2> /dev/null`
+oconvert=`which osmconvert 2> /dev/null` # needed by osmupdate
 
 # Creating tmp-directory for updates
 mkdir -p tmp
@@ -42,6 +43,16 @@ then
 	if [ ! -f tools/osmupdate ]
 	then
 		echo_time "Unable to compile osmupdate, please install osmupdate into \$PATH or in tools/ directory."
+		exit
+	fi
+fi
+if [ -z "$oconvert" ]
+then
+	echo_time "Try to complie osmconvert ..."
+	wget -O - http://m.m.i24.cc/osmconvert.c | cc -x c - -lz -O3 -o tools/osmconvert
+	if [ ! -f tools/osmconvert ]
+	then
+		echo_time "Unable to compile osmconvert, please install osmconvert into \$PATH or tools/ directory."
 		exit
 	fi
 fi
