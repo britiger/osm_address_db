@@ -1,3 +1,6 @@
+-- ignore NOTICE
+SET client_min_messages TO WARNING;
+
 -- addresses
 -- XX will be replaces with number of partition. see osmupdate.sh first
 CREATE INDEX IF NOT EXISTS osm_addresses_XX_geom ON import.osm_addresses_XX USING gist (geometry);
