@@ -17,7 +17,7 @@ DECLARE need_update boolean;
 		INSERT INTO web.invalid_state (city_osm_id) VALUES ($1) ON CONFLICT DO NOTHING;
 		-- Query current state
 		SELECT last_update INTO city_ts FROM web.invalid_state WHERE city_osm_id = $1 AND suburb_osm_id = 0 FOR UPDATE;
-		SELECT val INTO update_ts FROM config_values WHERE "key" = 'update_ts_full';
+		SELECT val INTO update_ts FROM config_values WHERE "key" = 'update_ts_address';
 		IF city_ts IS NULL OR force = true OR city_ts < update_ts THEN
 			need_update := true;
 		END IF;
@@ -67,7 +67,7 @@ DECLARE need_update boolean;
 		INSERT INTO web.invalid_state (city_osm_id, suburb_osm_id) VALUES ($1, $2) ON CONFLICT DO NOTHING;
 		-- Query current state
 		SELECT last_update INTO city_ts FROM web.invalid_state WHERE city_osm_id = $1 AND suburb_osm_id = $2 FOR UPDATE;
-		SELECT val INTO update_ts FROM config_values WHERE "key" = 'update_ts_full';
+		SELECT val INTO update_ts FROM config_values WHERE "key" = 'update_ts_address';
 		IF city_ts IS NULL OR force = true OR city_ts < update_ts THEN
 			need_update := true;
 		END IF;
