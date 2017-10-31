@@ -15,7 +15,7 @@ CREATE OR REPLACE VIEW osm_admin AS
 CREATE OR REPLACE VIEW osm_places AS
 	SELECT osm_id, 'polygon' AS class, name, place AS "type", population, way AS geometry
 	FROM planet_osm_polygon
-	WHERE place IS NOT NULL AND name IS NOT NULL
+	WHERE place IS NOT NULL AND name IS NOT NULL AND boundary<>'administrative' AND admin_level IS NULL
 		UNION
 	SELECT osm_id, 'point' AS class, name, place AS "type", population, way AS geometry
 	FROM planet_osm_point  
