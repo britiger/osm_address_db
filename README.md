@@ -21,6 +21,7 @@ Programs
    - parameter full: Updates all data and refresh all materialized views
    - parameter address: Updates all data but use the old materialized views, this is for a fast update of the database
  - build_statistics.sh - Create schema statistics and tables. If you want a history of count of roads and addresses you should run this script after every update. 
+ - build_errors.sh - Updating tables in schema web with address errors including writing statistics with count of errors
  - export_data.sh - Create the directory export and create the folowing files:
    - addresses.csv - All unique addresses within the database including centered lat and lon
    - city_roads.csv - List of all existing roads within the cities
