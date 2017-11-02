@@ -80,6 +80,9 @@ then
 	exit 1
 fi
 
+# Set update start time
+psql -f sql/planetUpdateStartConfigTime.sql > /dev/null
+
 if [ "$1" = "first" ] || [ -f tmp/update.osc.gz ]
 then
 	echo_time "Disable autovacuum ..."
