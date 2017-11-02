@@ -20,6 +20,11 @@ Programs
    - parameter first: don't run it if the import finished successful, only use it the import failed because of missing or compilation errors of osmupdate
    - parameter full: Updates all data and refresh all materialized views
    - parameter address: Updates all data but use the old materialized views, this is for a fast update of the database
+ - build_statistics.sh - Create schema statistics and tables. If you want a history of count of roads and addresses you should run this script after every update. 
+ - export_data.sh - Create the directory export and create the folowing files:
+   - addresses.csv - All unique addresses within the database including centered lat and lon
+   - city_roads.csv - List of all existing roads within the cities
+   - city_postcode.csv - List of cities and there postcodes
    
 Old Tools
 --------
