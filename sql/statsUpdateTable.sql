@@ -22,7 +22,7 @@ ON CONFLICT DO NOTHING;
 -- Update address_count
 DO $$
 BEGIN
-  IF (SELECT val FROM config_values WHERE key='update_ts_address')::timestamptz <= (SELECT max(last_update) FROM statistics.road_addresses WHERE count_addresses IS NOT NULL) THEN
+  IF (SELECT val FROM config_values WHERE key='update_ts_address')::timestamptz <= (SELECT max(last_update) FROM statistics.road_addresses WHERE count_addresses IS NOT NULL AND osm_id<>0) THEN
     RAISE NOTICE 'No update for addresses needed.';
   ELSE
     INSERT INTO statistics.road_addresses AS stats (osm_id, last_update, count_addresses)
@@ -44,7 +44,7 @@ END$$;
 -- Update road_count
 DO $$
 BEGIN
-  IF (SELECT val FROM config_values WHERE key='update_ts_full')::timestamptz <= (SELECT max(last_update) FROM statistics.road_addresses WHERE count_roads IS NOT NULL) THEN
+  IF (SELECT val FROM config_values WHERE key='update_ts_full')::timestamptz <= (SELECT max(last_update) FROM statistics.road_addresses WHERE count_roads IS NOT NULL AND osm_id<>0) THEN
     RAISE NOTICE 'No update for roads needed.';
   ELSE
     INSERT INTO statistics.road_addresses AS stats (osm_id, last_update, count_roads)
