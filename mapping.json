@@ -1,0 +1,379 @@
+{
+    "areas": {
+        "linear_tags": [
+            "highway"
+        ]
+    },
+    "tables": {
+        "places_point": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "name",
+                    "key": "name"
+                },
+                {
+                    "type": "mapping_value",
+                    "name": "type",
+                    "key": null
+                },
+                {
+                    "type": "integer",
+                    "name": "population",
+                    "key": "population"
+                }
+            ],
+            "type": "point",
+            "mapping": {
+                "place": [
+                    "country",
+                    "state",
+                    "region",
+                    "county",
+                    "city",
+                    "town",
+                    "village",
+                    "hamlet",
+                    "suburb",
+                    "locality"
+                ]
+            }
+        },
+        "places_poly": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "name",
+                    "key": "name"
+                },
+                {
+                    "type": "mapping_value",
+                    "name": "type",
+                    "key": null
+                },
+                {
+                    "type": "integer",
+                    "name": "population",
+                    "key": "population"
+                }
+            ],
+            "type": "polygon",
+            "mapping": {
+                "place": [
+                    "country",
+                    "state",
+                    "region",
+                    "county",
+                    "city",
+                    "town",
+                    "village",
+                    "hamlet",
+                    "suburb",
+                    "locality"
+                ]
+            }
+        },
+        "admin": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "name",
+                    "key": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "ISO3166-2",
+                    "key": "ISO3166-2"
+                },                
+                {
+                    "type": "mapping_value",
+                    "name": "type",
+                    "key": null
+                },
+                {
+                    "type": "integer",
+                    "name": "admin_level",
+                    "key": "admin_level"
+                }
+            ],
+            "type": "polygon",
+            "mapping": {
+                "boundary": [
+                    "administrative"
+                ]
+            },
+            "filter": {
+                "require":  {
+                    "admin_level": [
+                        "__any__"
+                    ]
+                }
+            }
+        },
+        "postcodes": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "postal_code",
+                    "key": "postal_code"
+                }
+            ],
+            "type": "polygon",
+            "mapping": {
+                "boundary": [
+                    "postal_code"
+                ]
+            },
+            "filter": {
+                "require":  {
+                    "postal_code": [
+                        "__any__"
+                    ]
+                }
+            }
+        },
+        "roads": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "mapping_value",
+                    "name": "type",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "name",
+                    "key": "name"
+                }
+            ],
+            "type": "linestring",
+            "mapping": {
+                "highway": [
+                    "__any__"
+                ]
+            },
+            "filter": {
+                "require":  {
+                    "name": [
+                        "__any__"
+                    ]
+                }
+            }
+        },
+        "addresses_point": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "mapping_value",
+                    "name": "addr:housenumber",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "addr:housename",
+                    "key": "addr:housename"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:street",
+                    "key": "addr:street"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:postcode",
+                    "key": "addr:postcode"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:city",
+                    "key": "addr:city"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:suburb",
+                    "key": "addr:suburb"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:place",
+                    "key": "addr:place"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:hamlet",
+                    "key": "addr:hamlet"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:country",
+                    "key": "addr:country"
+                }
+            ],
+            "type": "point",
+            "mapping": {
+                "addr:housenumber": [
+                    "__any__"
+                ]
+            }
+        },
+        "addresses_poly": {
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "geometry",
+                    "name": "geometry",
+                    "key": null
+                },
+                {
+                    "type": "mapping_value",
+                    "name": "addr:housenumber",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "addr:housename",
+                    "key": "addr:housename"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:street",
+                    "key": "addr:street"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:postcode",
+                    "key": "addr:postcode"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:city",
+                    "key": "addr:city"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:suburb",
+                    "key": "addr:suburb"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:place",
+                    "key": "addr:place"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:hamlet",
+                    "key": "addr:hamlet"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:country",
+                    "key": "addr:country"
+                }
+            ],
+            "type": "polygon",
+            "mapping": {
+                "addr:housenumber": [
+                    "__any__"
+                ]
+            }
+        },
+        "asso_street": {
+            "type" : "relation_member",
+            "columns": [
+                {
+                    "type": "id",
+                    "name": "osm_id",
+                    "key": null
+                },
+                {
+                    "type": "member_id",
+                    "name": "member_osm_id",
+                    "key": null
+                },
+                {
+                    "type": "member_role",
+                    "name": "role",
+                    "key": null
+                },
+                {
+                    "type": "member_type",
+                    "name": "member_type",
+                    "key": null
+                },
+                {
+                    "type": "string",
+                    "name": "name",
+                    "key": "name"
+                }
+            ],
+            "relation_type": "associatedStreet",
+            "mapping": {
+                "type": [
+                    "associatedStreet"
+                ]            
+            }
+        }
+    }
+}

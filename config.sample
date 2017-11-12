@@ -7,10 +7,9 @@ database=osm
 pghost=127.0.0.1
 pgport=5432
 
-o2pProcesses=2
-o2pCache=3500MB
-#o2pParameters='--flat-nodes ./flat-nodes.db'
+cache_dir=./cache
+diff_dir=./diff
 
 #parameter for osmupdate, see osmupdate --help for details
-#osmupdate_parameter='--day --base-url=http://download.geofabrik.de/europe/germany-updates'
+#osmupdate_parameter='--base-url=http://download.geofabrik.de/europe/germany-updates'
 #osmupdate_parameter='--hour'

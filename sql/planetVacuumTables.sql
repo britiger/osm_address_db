@@ -1,8 +1,9 @@
 ﻿-- VACUUM planet_* tables
-ANALYSE planet_osm_line;
-ANALYSE planet_osm_nodes;
-ANALYSE planet_osm_point;
-ANALYSE planet_osm_polygon;
-ANALYSE planet_osm_rels;
-ANALYSE planet_osm_roads;
-ANALYSE planet_osm_ways;
+ANALYSE imposm_addresses_point;
+ANALYSE imposm_addresses_poly;
+ANALYSE imposm_admin;
+ANALYSE imposm_asso_street;
+ANALYSE imposm_places_point;
+ANALYSE imposm_places_poly;
+ANALYSE imposm_postcodes;
+ANALYSE imposm_roads;

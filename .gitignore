@@ -8,6 +8,9 @@ config
 tmp/*
 log/*
 export/*
+diff/*
+cache/*
+tools/imposm3
 tools/osm2pgsql
 tools/osmupdate
 tools/osmconvert

@@ -10,6 +10,9 @@ export PGUSER=$username
 export PGPASSWORD=$password
 export PGDATABASE=$database
 
+# delete old cache and diff
+rm -rf $cache_dir $diff_dir
+
 # Creating nessesary directories
 mkdir -p tmp # for storing last update files
 mkdir -p log # logging
@@ -38,13 +41,13 @@ psql -f sql/planetDropAllTables.sql > /dev/null
 
 # import data into database
 echo_time "Import data from $import_file ..."
-osm2pgsql --create -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database \
-	-S others/import.style -U $username $o2pParameters $import_file
+imposm3  import -config config.json -read $import_file -write -connection "postgis://${username}:${password}@${pghost}:${pgport}/${database}?prefix=imposm_" \
+  -diff -cachedir $cache_dir -diffdir $diff_dir -dbschema-import imposm3 -deployproduction
 # catch exit code of osm2pgsql
 RESULT=$?
 if [ $RESULT -ne 0 ]
 then
-	echo_time "osm2pgsql exits with error code $RESULT."
+	echo_time "imposm3 exits with error code $RESULT."
 	exit 1
 fi
 
@@ -53,13 +56,12 @@ psql -f sql/disableVacuum.sql > /dev/null 2>&1
 
 # create update tables
 echo_time "Creating update tables ..."
-psql -f sql/disableVacuum.sql > /dev/null 2>&1
 psql -f sql/planetCreateUpdateTables.sql > /dev/null
 
 # create trigger for update tables
 echo_time "Creating update triggers ..."
 psql -f sql/planetCreateUpdateTriggers.sql > /dev/null
-
+exit
 # create functions
 echo_time "Creating functions ..."
 psql -f sql/createFunctions.sql > /dev/null

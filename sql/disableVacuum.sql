@@ -1,47 +1,53 @@
 -- disable autovacuum for all tables
 
 -- public
-ALTER TABLE planet_osm_line SET (
+ALTER TABLE imposm_addresses_point SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE planet_osm_nodes SET (
+ALTER TABLE imposm_addresses_poly SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE planet_osm_point SET (
+ALTER TABLE imposm_admin SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE planet_osm_polygon SET (
+ALTER TABLE imposm_asso_street SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE planet_osm_rels SET (
+ALTER TABLE imposm_places_point SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE planet_osm_roads SET (
+ALTER TABLE imposm_places_poly SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE planet_osm_ways SET (
+ALTER TABLE imposm_postcodes SET (
+  autovacuum_enabled = false, toast.autovacuum_enabled = false
+);
+ALTER TABLE imposm_roads SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
 -- delete-tables
-ALTER TABLE update_line SET (
+ALTER TABLE update_addresses_point SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE update_nodes SET (
+ALTER TABLE update_addresses_poly SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE update_point SET (
+ALTER TABLE update_admin SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE update_polygon SET (
+ALTER TABLE update_asso_street SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
-ALTER TABLE update_rels SET (
+ALTER TABLE update_places_point SET (
+  autovacuum_enabled = false, toast.autovacuum_enabled = false
+);
+ALTER TABLE update_places_poly SET (
+  autovacuum_enabled = false, toast.autovacuum_enabled = false
+);
+ALTER TABLE update_postcodes SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
 ALTER TABLE update_roads SET (
-  autovacuum_enabled = false, toast.autovacuum_enabled = false
-);
-ALTER TABLE update_ways SET (
   autovacuum_enabled = false, toast.autovacuum_enabled = false
 );
 

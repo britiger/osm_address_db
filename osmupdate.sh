@@ -98,13 +98,13 @@ then
 		fi
 	else
 		# Import in DB
-		osm2pgsql --append -s --number-processes $o2pProcesses -C $o2pCache -H $pghost -P $pgport -d $database \
-			-S others/import.style -U $username $o2pParameters tmp/update.osc.gz
-		# catch exit code of osm2pgsql
+		imposm3  diff -config config.json -connection "postgis://${username}:${password}@${pghost}:${pgport}/${database}?prefix=imposm_" \
+           -cachedir $cache_dir -diffdir $diff_dir tmp/update.osc.gz
+		# catch exit code of imposm3
 		RESULT=$?
 		if [ $RESULT -ne 0 ]
 		then
-			echo_time "osm2pgsql exits with error code $RESULT."
+			echo_time "imposm3 exits with error code $RESULT."
 			exit 1
 		fi
 		psql -f sql/planetVacuumTables.sql > /dev/null
@@ -121,7 +121,7 @@ then
 		# Save data of updates for polygon for next full update
 		psql -f sql/planetPolyMoveForFullUpdate.sql > /dev/null
 	fi
-
+exit
 	# Complete Update table data in schema import
 	echo_time "Delete old elements ..."
 	psql -f sql/importDeleteOldEntries.sql > /dev/null
