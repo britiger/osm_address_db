@@ -2,8 +2,8 @@
 SET client_min_messages TO WARNING;
 
 -- Dropping imposm3 schema
-DROP SCHEMA IF EXISTS backup;
-DROP SCHEMA IF EXISTS imposm3;
+DROP SCHEMA IF EXISTS backup CASCADE;
+DROP SCHEMA IF EXISTS imposm3 CASCADE;
 
 -- DROP all existing tables
 -- config

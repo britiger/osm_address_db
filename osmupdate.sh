@@ -121,7 +121,7 @@ then
 		# Save data of updates for polygon for next full update
 		psql -f sql/planetPolyMoveForFullUpdate.sql > /dev/null
 	fi
-exit
+
 	# Complete Update table data in schema import
 	echo_time "Delete old elements ..."
 	psql -f sql/importDeleteOldEntries.sql > /dev/null

@@ -47,6 +47,13 @@
                     "suburb",
                     "locality"
                 ]
+            },
+            "filter": {
+                "require":  {
+                    "name": [
+                        "__any__"
+                    ]
+                }
             }
         },
         "places_poly": {
@@ -75,7 +82,18 @@
                     "type": "integer",
                     "name": "population",
                     "key": "population"
+                },
+                {
+                    "type": "string",
+                    "name": "boundary",
+                    "key": "boundary"
+                },
+                {
+                    "type": "integer",
+                    "name": "admin_level",
+                    "key": "admin_level"
                 }
+                
             ],
             "type": "polygon",
             "mapping": {
@@ -91,6 +109,13 @@
                     "suburb",
                     "locality"
                 ]
+            },
+            "filter": {
+                "require":  {
+                    "name": [
+                        "__any__"
+                    ]
+                }
             }
         },
         "admin": {
@@ -112,12 +137,12 @@
                 },
                 {
                     "type": "string",
-                    "name": "ISO3166-2",
-                    "key": "ISO3166-2"
+                    "name": "ISO3166-1",
+                    "key": "ISO3166-1"
                 },                
                 {
                     "type": "mapping_value",
-                    "name": "type",
+                    "name": "boundary",
                     "key": null
                 },
                 {
@@ -135,6 +160,9 @@
             "filter": {
                 "require":  {
                     "admin_level": [
+                        "__any__"
+                    ],
+                    "name": [
                         "__any__"
                     ]
                 }
@@ -186,13 +214,18 @@
                 },
                 {
                     "type": "mapping_value",
-                    "name": "type",
+                    "name": "highway",
                     "key": null
                 },
                 {
                     "type": "string",
                     "name": "name",
                     "key": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "addr:suburb",
+                    "key": "addr:suburb"
                 }
             ],
             "type": "linestring",

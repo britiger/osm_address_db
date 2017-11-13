@@ -61,7 +61,7 @@ psql -f sql/planetCreateUpdateTables.sql > /dev/null
 # create trigger for update tables
 echo_time "Creating update triggers ..."
 psql -f sql/planetCreateUpdateTriggers.sql > /dev/null
-exit
+
 # create functions
 echo_time "Creating functions ..."
 psql -f sql/createFunctions.sql > /dev/null
