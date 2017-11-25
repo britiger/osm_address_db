@@ -109,7 +109,7 @@ then
 		fi
 		psql -f sql/planetVacuumTables.sql > /dev/null
 
-		update_ts=`zcat tmp/update.osc.gz | xmllint --xpath 'string(/osmChange/@timestamp)' -`
+		update_ts=`zcat tmp/update.osc.gz | head | grep '<osmChange' | awk '{print $0"</osmChange>"}' | xmllint --xpath 'string(/osmChange/@timestamp)' -`
 		mv tmp/update.osc.gz tmp/old_update.osc.gz
 	fi
 
