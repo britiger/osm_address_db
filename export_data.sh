@@ -15,7 +15,7 @@ mkdir -p export
 
 # Export roads by city
 echo_time "Export roads to export/city_roads.csv ..."
-psql -c "COPY (SELECT cr.road_name, oa.name city_name FROM import.city_roads cr LEFT JOIN import.osm_admin oa ON cr.city_osm_id=oa.osm_id GROUP BY cr.road_name, oa.name) TO STDOUT WITH (FORMAT CSV, HEADER, FORCE_QUOTE *);" > export/city_roads.csv
+psql -c "COPY (SELECT cr.road_name, oa.name city_name, cr.postal_code_tags FROM import.city_roads cr LEFT JOIN import.osm_admin oa ON cr.city_osm_id=oa.osm_id GROUP BY cr.road_name, oa.name, cr.postal_code_tags) TO STDOUT WITH (FORMAT CSV, HEADER, FORCE_QUOTE *);" > export/city_roads.csv
 
 # Export postcode by city
 echo_time "Export postcodes to export/city_postcode.csv ..."

@@ -224,6 +224,11 @@
                 },
                 {
                     "type": "string",
+                    "name": "postal_code",
+                    "key": "postal_code"
+                },
+                {
+                    "type": "string",
                     "name": "addr:suburb",
                     "key": "addr:suburb"
                 }

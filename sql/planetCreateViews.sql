@@ -57,7 +57,7 @@ CREATE OR REPLACE VIEW osm_associated AS
 
 -- osm_roads
 CREATE OR REPLACE VIEW osm_roads AS
-	SELECT osm_id, name, highway, NULLIF("addr:suburb",'') AS "addr:suburb", geometry
+	SELECT osm_id, name, highway, NULLIF(postal_code,'') AS postal_code, NULLIF("addr:suburb",'') AS "addr:suburb", geometry
 	FROM imposm_roads
 	WHERE name<>'' AND highway<>'' AND highway NOT IN('platform', 'bus_stop', 'proposed');
 

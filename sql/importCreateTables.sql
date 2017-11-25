@@ -40,6 +40,7 @@ CREATE TABLE import.osm_roads
   osm_id bigint,
   name text,
   highway text,
+  postal_code text,
   "addr:suburb" text,
   geometry geometry
 );

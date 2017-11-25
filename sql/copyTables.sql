@@ -28,7 +28,7 @@ GROUP BY osm_id, class, name, type, population;
 
 -- osm_roads
 INSERT INTO import.osm_roads
-SELECT osm_id, name, highway, "addr:suburb", geometry
+SELECT osm_id, name, highway, postal_code, "addr:suburb", geometry
 FROM osm_roads
 WHERE osm_id IN (SELECT osm_id FROM update_roads WHERE update_type!='D');
 UPDATE import.osm_roads SET geometry=ST_ExteriorRing(geometry) WHERE ST_geometrytype(geometry) = 'ST_Polygon';

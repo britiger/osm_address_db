@@ -75,6 +75,7 @@ road.name AS road_name,
 city.osm_id AS city_osm_id, 
 "addr:suburb" as suburb,
 string_agg(road.osm_id::text, ',') as road_osm_ids,
+string_agg(DISTINCT road.postal_code::text, ',') as postal_code_tags,
 string_agg(DISTINCT road.highway::text, ',') as highway_tags,
 ST_UNION(road.geometry) as roads_geom
 FROM import.osm_roads as road, 
