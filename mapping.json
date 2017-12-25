@@ -233,11 +233,14 @@
                     "key": "addr:suburb"
                 }
             ],
-            "type": "linestring",
-            "mapping": {
-                "highway": [
-                    "__any__"
-                ]
+            "type": "geometry",
+            "type_mappings": {
+                "linestrings": {
+                     "highway": ["__any__"]
+                },
+                "polygons": {
+                     "highway": ["__any__"]
+                }
             },
             "filter": {
                 "require":  {

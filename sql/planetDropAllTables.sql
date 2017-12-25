@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS imposm_admin CASCADE;
 DROP TABLE IF EXISTS imposm_asso_street CASCADE;
 DROP TABLE IF EXISTS imposm_places_point CASCADE;
 DROP TABLE IF EXISTS imposm_places_poly CASCADE;
+DROP TABLE IF EXISTS imposm_postcodes CASCADE;
 DROP TABLE IF EXISTS imposm_roads CASCADE;
 
 -- create Extension if not exists
