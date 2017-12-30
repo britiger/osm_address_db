@@ -9,6 +9,10 @@ CREATE TABLE IF NOT EXISTS web.osm_false_positive_double
   osm_id bigint NOT NULL,
   class text NOT NULL,
   verified_by character varying(255),
+  "addr:housenumber" character varying(255),
+  "addr:street" character varying(255),
+  "addr:postcode" character varying(255),
+  geometry geometry,
   CONSTRAINT pk_osm_id_class PRIMARY KEY (osm_id, class)
 );
 
