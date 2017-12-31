@@ -9,3 +9,10 @@ WHERE addr.osm_id=double.osm_id AND addr.class=double.class AND
   OR addr."addr:housenumber"  != addr."addr:housenumber"
   OR addr."addr:street" != addr."addr:street"
   OR addr."addr:postcode" != addr."addr:postcode");
+
+-- wrong road names
+DELETE FROM web.osm_false_positive_road AS fproad
+USING import.osm_roads AS road
+WHERE fproad.osm_id = road.osm_id
+  AND fproad.name != road.name;
+  

@@ -3,7 +3,7 @@ SET client_min_messages TO WARNING;
 -- Creating schema
 CREATE SCHEMA IF NOT EXISTS web;
 
--- Table for storing false positives
+-- Table for storing false positives of double addresses
 CREATE TABLE IF NOT EXISTS web.osm_false_positive_double
 (
   osm_id bigint NOT NULL,
@@ -13,7 +13,16 @@ CREATE TABLE IF NOT EXISTS web.osm_false_positive_double
   "addr:street" character varying(255),
   "addr:postcode" character varying(255),
   geometry geometry,
-  CONSTRAINT pk_osm_id_class PRIMARY KEY (osm_id, class)
+  CONSTRAINT pk_double_osm_id_class PRIMARY KEY (osm_id, class)
+);
+
+-- Table for storing false positives of road names
+CREATE TABLE IF NOT EXISTS web.osm_false_positive_road
+(
+  osm_id bigint NOT NULL,
+  verified_by character varying(255),
+  name character varying(255),
+  CONSTRAINT pk_road_osm_id_class PRIMARY KEY (osm_id)
 );
 
 -- Tables for caching invalid addresses
