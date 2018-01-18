@@ -134,7 +134,12 @@ then
 
 	# apply assisciated Street relations
 	echo_time "Apply relations type=associatedStreet ..."
-	psql -f sql/importApplyAssociatedStreet.sql > /dev/null
+	psql -f sql/importRefreshAssociatedStreet.sql > /dev/null
+	for i in $(seq -f "%02g" 0 $partition_count)
+	do
+		execute_partition_script $i "sql/importApplyAssociatedStreet.sql" "Apply AssociatedStreet"&
+	done
+	wait
 
 	# Update Database ... full | address | first
 	if [ "$1" != "address" ]
