@@ -132,6 +132,20 @@ then
 	echo_time "Vacuum on schema import ..."
 	psql -f sql/importVacuumTables.sql > /dev/null
 
+	if [ "$1" == "first" ]
+	then
+		# this part is for first running after import
+		echo_time "Create indexes on schema import ..."
+		psql -f sql/importCreateIndex.sql > /dev/null
+
+		echo_time "Create indexes on address partition tables ..."
+		for i in $(seq -f "%02g" 0 $partition_count)
+		do
+			echo_time "  - For partition ${i}"
+			cat sql/importCreateIndexPartitions.sql | sed -e "s/XX/${i}/g" | psql > /dev/null
+		done
+	fi
+
 	# apply assisciated Street relations
 	echo_time "Apply relations type=associatedStreet ..."
 	psql -f sql/importRefreshAssociatedStreet.sql > /dev/null
@@ -144,19 +158,8 @@ then
 	# Update Database ... full | address | first
 	if [ "$1" != "address" ]
 	then
-		# Running full update
-
-		# this part is for first running after import
-		echo_time "Checking indexes on schema import ..."
-		psql -f sql/importCreateIndex.sql > /dev/null
-
-		echo_time "Checking indexes on address partition tables ..."
-		for i in $(seq -f "%02g" 0 $partition_count)
-		do
-			echo_time "  - For partition ${i}"
-			cat sql/importCreateIndexPartitions.sql | sed -e "s/XX/${i}/g" | psql > /dev/null
-		done
-
+		# Running full / first update
+		
 		echo_time "Refresh materialized views ..."
 		psql -f sql/importUpdateMatViewsFull.sql > /dev/null
 
