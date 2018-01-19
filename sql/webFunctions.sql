@@ -1,3 +1,6 @@
+-- ignore NOTICE
+SET client_min_messages TO WARNING;
+
 -- This files contains some functions which usable for building web applications based on the tables
 
 -- Create function for caching invalid addresses
