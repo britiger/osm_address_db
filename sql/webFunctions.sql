@@ -26,7 +26,7 @@ DECLARE need_update boolean;
 		END IF;
 		IF need_update = true THEN
 			-- Delete old entries
-			DELETE FROM web.invalid_addresses WHERE city_osm_id = $1;
+			DELETE FROM web.invalid_addresses WHERE city_osm_id = $1 AND suburb_osm_id = 0;
 			-- Copy current invalid addresses
 			INSERT INTO web.invalid_addresses
 			SELECT city.osm_id AS city_osm_id, 0, addr.osm_id AS address_osm_id
@@ -76,7 +76,7 @@ DECLARE need_update boolean;
 		END IF;
 		IF need_update = true THEN
 			-- Delete old entries
-			DELETE FROM web.invalid_addresses WHERE city_osm_id = $1;
+			DELETE FROM web.invalid_addresses WHERE city_osm_id = $1 AND suburb_osm_id = $2;
 			-- Copy current invalid addresses
 			INSERT INTO web.invalid_addresses
 			SELECT $1 AS city_osm_id, $2 AS suburb_osm_id, addr.osm_id AS address_osm_id
