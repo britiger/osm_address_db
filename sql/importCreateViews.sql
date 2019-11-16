@@ -112,6 +112,8 @@ SELECT (a.osm_id || ';' || a.class) As osmIdA,
 FROM import.osm_addresses AS a,
 	import.osm_addresses AS b 
 WHERE a.osm_id<b.osm_id 
+  AND ST_SRID(a.geometry) > 0
+  AND ST_SRID(b.geometry) > 0
   AND a."addr:city" = b."addr:city" 
   AND a."addr:postcode" IS NOT DISTINCT FROM b."addr:postcode" 
   AND a."addr:suburb" IS NOT DISTINCT FROM b."addr:suburb" 
