@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS externaldata.all_data (
 
 -- View for all streets
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.street_data AS
-SELECT array_agg(DISTINCT datasource_id), 
+SELECT array_agg(DISTINCT datasource_id) AS datasource_ids, 
     city_osm_id,
     suburb_osm_id,
     "addr:country",
@@ -49,7 +49,7 @@ GROUP BY city_osm_id,
 ;
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.street_data_city AS
-SELECT array_agg(DISTINCT datasource_id), 
+SELECT array_agg(DISTINCT datasource_id) AS datasource_ids, 
     city_osm_id,
     "addr:country",
     "addr:city",
@@ -66,7 +66,7 @@ GROUP BY city_osm_id,
 
 -- View for all addresses
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.address_data AS
-SELECT array_agg(DISTINCT datasource_id), 
+SELECT array_agg(DISTINCT datasource_id) AS datasource_ids, 
     city_osm_id,
     suburb_osm_id,
     "addr:country",
@@ -89,7 +89,7 @@ GROUP BY city_osm_id,
 ;
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.address_data_city AS
-SELECT array_agg(DISTINCT datasource_id), 
+SELECT array_agg(DISTINCT datasource_id) AS datasource_ids, 
     city_osm_id,
     "addr:country",
     "addr:city",
