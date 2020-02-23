@@ -15,3 +15,5 @@ tools/osm2pgsql
 tools/osmupdate
 tools/osmconvert
 flat-nodes.db
+external/scripts/venv/*
+external/data/*

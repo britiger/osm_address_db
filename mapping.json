@@ -139,7 +139,12 @@
                     "type": "string",
                     "name": "ISO3166-1",
                     "key": "ISO3166-1"
-                },                
+                },
+                {
+                    "type": "string",
+                    "name": "de:amtlicher_gemeindeschluessel",
+                    "key": "de:amtlicher_gemeindeschluessel"
+                },
                 {
                     "type": "mapping_value",
                     "name": "boundary",

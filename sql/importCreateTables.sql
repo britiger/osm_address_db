@@ -12,6 +12,7 @@ CREATE TABLE import.osm_admin
   name text,
   admin_level integer,
   "ISO3166-1" text,
+  "de:amtlicher_gemeindeschluessel" text,
   geometry geometry
 );
 

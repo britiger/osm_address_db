@@ -6,11 +6,11 @@ SET client_min_messages TO WARNING;
 -- osm_admin
 
 INSERT INTO import.osm_admin
-SELECT osm_id, name, admin_level, "ISO3166-1", ST_Union(geometry) AS geometry
+SELECT osm_id, name, admin_level, "ISO3166-1", "de:amtlicher_gemeindeschluessel", ST_Union(geometry) AS geometry
 FROM osm_admin
 WHERE ((admin_level = 2 AND "ISO3166-1" IS NOT NULL) OR admin_level>2)
 	AND osm_id IN (SELECT osm_id FROM update_admin WHERE update_type!='D')
-GROUP BY osm_id, name, admin_level, "ISO3166-1";
+GROUP BY osm_id, name, admin_level, "ISO3166-1", "de:amtlicher_gemeindeschluessel";
 
 -- osm_postcode
 INSERT INTO import.osm_postcode

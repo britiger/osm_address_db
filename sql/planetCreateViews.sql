@@ -5,7 +5,7 @@ SET client_min_messages TO WARNING;
 
 -- osm_admin
 CREATE OR REPLACE VIEW osm_admin AS
-	SELECT osm_id, name, admin_level::integer, NULLIF("ISO3166-1",'') AS "ISO3166-1", geometry
+	SELECT osm_id, name, admin_level::integer, NULLIF("ISO3166-1",'') AS "ISO3166-1", "de:amtlicher_gemeindeschluessel", geometry
 	FROM imposm_admin
 	WHERE admin_level IN('1','2','3','4','5','6','7','8','9','10','11','12','13')
 	  AND boundary='administrative'
