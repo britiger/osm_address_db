@@ -106,3 +106,19 @@ GROUP BY city_osm_id,
     "addr:street",
     "addr:housenumber"
 ;
+
+-- View for suburbs per city
+CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.suburb_data AS
+SELECT array_agg(DISTINCT datasource_id) AS datasource_ids, 
+    city_osm_id,
+    "addr:country",
+    "addr:city",
+    "addr:suburb"
+FROM externaldata.all_data
+WHERE is_valid = true 
+  AND "addr:suburb" IS NOT NULL
+GROUP BY city_osm_id,
+    "addr:country",
+    "addr:city",
+    "addr:suburb"
+;

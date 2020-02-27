@@ -47,3 +47,4 @@ REFRESH MATERIALIZED VIEW externaldata.street_data_city;
 REFRESH MATERIALIZED VIEW externaldata.street_data;
 REFRESH MATERIALIZED VIEW externaldata.address_data_city;
 REFRESH MATERIALIZED VIEW externaldata.address_data;
+REFRESH MATERIALIZED VIEW externaldata.suburb_data;
