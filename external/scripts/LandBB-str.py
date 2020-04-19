@@ -25,6 +25,11 @@ def init_external():
         'lic': '© GeoBasis-DE/LGB, dl-de/by-2-0',
         'link': 'https://geobroker.geobasis-bb.de/gbss.php?MODE=GetProductInformation&PRODUCTID=56f65bd3-ea75-40f9-afff-090a9fe3804f'
     })
+    sql = text('INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) VALUES (:src, :osm_id) ON CONFLICT DO NOTHING')
+    engine.execute(sql, {
+        'src': 1,
+        'osm_id': -62504
+    })
 
 
 def add_street(val):

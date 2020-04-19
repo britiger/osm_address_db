@@ -12,6 +12,13 @@ CREATE TABLE IF NOT EXISTS externaldata.datasource (
     link VARCHAR(255)
 );
 
+-- Table contains osm_ids of admininistraive boundaries for datasources
+CREATE TABLE IF NOT EXISTS externaldata.datasource_admin (
+    datasource_id BIGINT,
+    admin_osm_id BIGINT,
+    UNIQUE (datasource_id, admin_osm_id)
+);
+
 CREATE TABLE IF NOT EXISTS externaldata.all_data (
     id serial PRIMARY KEY,
     datasource_id BIGINT,

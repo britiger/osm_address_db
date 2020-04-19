@@ -25,6 +25,11 @@ def init_external():
         'lic': '© GeoBasis-DE/LGB, dl-de/by-2-0',
         'link': 'https://geobroker.geobasis-bb.de/gbss.php?MODE=GetProductInformation&PRODUCTID=51600a1d-c7a3-4211-aff8-e94fb7dc166d'
     })
+    sql = text('INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) VALUES (:src, :osm_id) ON CONFLICT DO NOTHING')
+    engine.execute(sql, {
+        'src': 2,
+        'osm_id': -62504
+    })
 
 
 init_external()
