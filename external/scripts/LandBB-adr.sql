@@ -42,6 +42,11 @@ WHERE datasource_id=2
   AND ad.city_osm_id=cs.city_osm_id AND ad."addr:suburb"=cs.suburb_name
   AND "addr:suburb" IS NOT NULL;
 
+-- set date of dataset to 
+UPDATE externaldata.datasource 
+  SET sourcedate=(select to_date(max(AUD),'YYYYMMDD') FROM externaldata.landbb_adr)
+WHERE id=2;
+
 -- Update Views
 REFRESH MATERIALIZED VIEW externaldata.street_data_city;
 REFRESH MATERIALIZED VIEW externaldata.street_data;
