@@ -54,6 +54,7 @@ GROUP BY city_osm_id,
     "addr:street",
     "addr:suburb"
 ;
+CREATE INDEX street_data_idx ON externaldata.street_data (city_osm_id);
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.street_data_city AS
 SELECT array_agg(DISTINCT datasource_id) AS datasource_ids, 
@@ -70,6 +71,7 @@ GROUP BY city_osm_id,
     "addr:postcode",
     "addr:street"
 ;
+CREATE INDEX street_data_city_idx ON externaldata.street_data_city (city_osm_id);
 
 -- View for all addresses
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.address_data AS
@@ -94,6 +96,8 @@ GROUP BY city_osm_id,
     "addr:housenumber",
     "addr:suburb"
 ;
+CREATE INDEX address_data_idx ON externaldata.address_data (city_osm_id);
+CREATE INDEX address_data_street_idx ON externaldata.address_data ("addr:street");
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.address_data_city AS
 SELECT array_agg(DISTINCT datasource_id) AS datasource_ids, 
@@ -113,6 +117,8 @@ GROUP BY city_osm_id,
     "addr:street",
     "addr:housenumber"
 ;
+CREATE INDEX address_data_city_idx ON externaldata.address_data_city (city_osm_id);
+CREATE INDEX address_data_city_street_idx ON externaldata.address_data_city ("addr:street");
 
 -- View for suburbs per city
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.suburb_data AS
@@ -129,3 +135,4 @@ GROUP BY city_osm_id,
     "addr:city",
     "addr:suburb"
 ;
+CREATE INDEX suburb_data_idx ON externaldata.suburb_data (city_osm_id);
