@@ -46,6 +46,7 @@ SELECT array_agg(DISTINCT datasource_id) AS datasource_ids,
     "addr:suburb"
 FROM externaldata.all_data
 WHERE is_valid = true
+  AND "addr:street" IS NOT NULL
 GROUP BY city_osm_id,
     suburb_osm_id,
     "addr:country",
@@ -65,6 +66,7 @@ SELECT array_agg(DISTINCT datasource_id) AS datasource_ids,
     "addr:street"
 FROM externaldata.all_data
 WHERE is_valid = true
+  AND "addr:street" IS NOT NULL
 GROUP BY city_osm_id,
     "addr:country",
     "addr:city",
