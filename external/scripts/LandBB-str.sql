@@ -32,6 +32,7 @@ WHERE datasource_id=1
   AND all_data ->> 'strschl' NOT LIKE 'L%'  -- Landesstraße
   AND all_data ->> 'strschl' NOT LIKE 'B%'  -- Bundestraße
   AND all_data ->> 'strschl' NOT LIKE 'A%'  -- Autobahn
+  AND char_length(all_data->>'strschl') <= 5 -- long strschl are waterways 
   ;
 
 -- Update Views
