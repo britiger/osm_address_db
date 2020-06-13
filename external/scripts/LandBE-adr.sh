@@ -31,7 +31,6 @@ psql -c "DELETE FROM externaldata.all_data WHERE datasource_id=4" > /dev/null
 
 echo_time "Start Import Data ..."
 
-# python3 LandBB-adr.py
 ogr2ogr -f "PostgreSQL" PG:"$OGR2OGR_PGSQL" \
     -progress \
     -overwrite -lco GEOMETRY_NAME=geom \

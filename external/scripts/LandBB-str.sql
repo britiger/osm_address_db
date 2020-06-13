@@ -1,4 +1,17 @@
--- File for processing data imported
+-- ID: 1 - Land Brandenburg - OSM-Id Relation 62504
+
+-- Metadata
+INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link, hasstreet) 
+    VALUES (1,
+        'Straßenverzeichnis Brandenburg',
+        'Verzeichnis aller Straßen der Gemeinden in Brandenburg',
+        '© GeoBasis-DE/LGB, dl-de/by-2-0',
+        'https://geobroker.geobasis-bb.de/gbss.php?MODE=GetProductInformation&PRODUCTID=56f65bd3-ea75-40f9-afff-090a9fe3804f',
+        true)
+    ON CONFLICT DO NOTHING;
+INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) 
+    VALUES (1, -62504) 
+    ON CONFLICT DO NOTHING;
 
 -- copy street and city from source
 UPDATE externaldata.all_data

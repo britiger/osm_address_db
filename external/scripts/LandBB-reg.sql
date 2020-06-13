@@ -1,15 +1,19 @@
+-- ID: 3 - Land Brandenburg - OSM-Id Relation 62504
 -- Germany -> Brandenburg -> Regionaldaten
-INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link) 
-VALUES (3,
-  'Regionaldaten-Verzeichnis',
-  'Verzeichnis der Kreise mit ihren Gemeinden und Gemarkungen',
-  '© GeoBasis-DE/LGB, dl-de/by-2-0',
-  'https://geobroker.geobasis-bb.de/gbss.php?MODE=GetProductInformation&PRODUCTID=39eb6261-37ab-45c8-8867-88304d4f908c') 
-ON CONFLICT DO NOTHING;
+
+-- Metadata
+INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link, hassuburb) 
+    VALUES (3,
+        'Regionaldaten-Verzeichnis',
+        'Verzeichnis der Kreise mit ihren Gemeinden und Gemarkungen',
+        '© GeoBasis-DE/LGB, dl-de/by-2-0',
+        'https://geobroker.geobasis-bb.de/gbss.php?MODE=GetProductInformation&PRODUCTID=39eb6261-37ab-45c8-8867-88304d4f908c',
+        true) 
+    ON CONFLICT DO NOTHING;
 
 INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) 
-VALUES (3, -62504) 
-ON CONFLICT DO NOTHING;
+    VALUES (3, -62504) 
+    ON CONFLICT DO NOTHING;
 
 -- Copy Data from import to all_data
 INSERT INTO externaldata.all_data

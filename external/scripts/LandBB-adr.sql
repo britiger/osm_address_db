@@ -1,3 +1,20 @@
+-- ID: 2 - Land Brandenburg - OSM-Id Relation 62504
+
+-- Metadata
+INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link, hasstreet, hassaddress, hassuburb) 
+    VALUES (2,
+        'Adressverzeichnis Brandenburg',
+        'Verzeichnis aller Adressen in Brandenburg',
+        '© GeoBasis-DE/LGB, dl-de/by-2-0',
+        'https://geobroker.geobasis-bb.de/gbss.php?MODE=GetProductInformation&PRODUCTID=51600a1d-c7a3-4211-aff8-e94fb7dc166d',
+        true,
+        true,
+        true)
+    ON CONFLICT DO NOTHING;
+INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) 
+    VALUES (2, -62504) 
+    ON CONFLICT DO NOTHING;
+
 -- Copy Data from import to all_data
 INSERT INTO externaldata.all_data
     (datasource_id, all_data, "addr:country", "addr:city", "addr:suburb", "addr:street", "addr:housenumber", is_valid)

@@ -1,12 +1,15 @@
 -- ID: 4 - Land Berlin - OSM-Id Relation 62422
 
 -- Metadata
-INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link) 
+INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link, hasaddress, hasstreet, hassuburb) 
     VALUES (4,
         'Adressen Berlin - [WFS]',
         'Die Adresspunkte stellen die amtlichen Berliner Adressen inklusive Koordinaten gemäß den Nummerierungsplänen der Vermessungsämter dar.',
         'Datenlizenz Deutschland – Namensnennung – Version 2.0',
-        'https://daten.berlin.de/datensaetze/adressen-berlin-wfs')
+        'https://daten.berlin.de/datensaetze/adressen-berlin-wfs',
+        true,
+        true,
+        true)
     ON CONFLICT DO NOTHING;
 INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) 
     VALUES (4, -62442) 

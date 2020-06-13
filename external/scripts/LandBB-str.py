@@ -16,22 +16,6 @@ except:
     print("Unable to connect to the database.")
 
 
-def init_external():
-    sql = text('INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link) VALUES (:id,:name,:desc,:lic,:link) ON CONFLICT DO NOTHING')
-    engine.execute(sql, {
-        'id': 1,
-        'name': 'Straßenverzeichnis Brandenburg',
-        'desc': 'Verzeichnis aller Straßen der Gemeinden in Brandenburg',
-        'lic': '© GeoBasis-DE/LGB, dl-de/by-2-0',
-        'link': 'https://geobroker.geobasis-bb.de/gbss.php?MODE=GetProductInformation&PRODUCTID=56f65bd3-ea75-40f9-afff-090a9fe3804f'
-    })
-    sql = text('INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) VALUES (:src, :osm_id) ON CONFLICT DO NOTHING')
-    engine.execute(sql, {
-        'src': 1,
-        'osm_id': -62504
-    })
-
-
 def add_street(val):
     # header:  # SCHL # KATASTERBEHOERDE           # SCHL     # GEMEINDE                  # SCHL  # LAGEBEZEICHNUNG                         #
     # data:    #  51  #  Brandenburg an der Havel  # 12051000 # Brandenburg an der Havel  # A0002 # A 2                                     #
@@ -72,5 +56,4 @@ def parse_file():
     f.close()
 
 
-init_external()
 parse_file()

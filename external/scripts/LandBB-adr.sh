@@ -23,25 +23,11 @@ fi
 
 OGR2OGR_PGSQL="host=$PGHOST port=$PGPORT dbname=$PGDATABASE user=$PGUSER password=$PGPASSWORD SCHEMAS=externaldata"
 
-echo_time "Setup Python ..."
-python3 -m venv venv
-if [ $? -ne 0 ]
-then
-    echo_time "Can't setup Python3 virtual enviroment."
-    exit 2
-fi
-source ./venv/bin/activate
-pip install --upgrade setuptools
-pip install wheel
-pip install -r  requirements.txt
-
 echo_time "Delete old Data ..."
 psql -c "DELETE FROM externaldata.all_data WHERE datasource_id=2" > /dev/null
 
-
 echo_time "Start Import Data ..."
 
-python3 LandBB-adr.py
 ogr2ogr -f "PostgreSQL" PG:"$OGR2OGR_PGSQL" \
     -progress -f GeoJSON \
     -overwrite -lco GEOMETRY_NAME=geom \
