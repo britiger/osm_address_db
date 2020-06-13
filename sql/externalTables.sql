@@ -9,7 +9,10 @@ CREATE TABLE IF NOT EXISTS externaldata.datasource (
     sourcename VARCHAR(255),
     sourcedescription TEXT,
     license VARCHAR(255),
-    link VARCHAR(255)
+    link VARCHAR(255),
+    hassuburb boolean DEFAULT false,
+    hasstreet boolean DEFAULT false,
+    hasaddress boolean DEFAULT false
 );
 
 -- Table contains osm_ids of admininistraive boundaries for datasources
@@ -33,6 +36,7 @@ CREATE TABLE IF NOT EXISTS externaldata.all_data (
     is_valid BOOLEAN DEFAULT false,
     all_data jsonb
 );
+CREATE INDEX IF NOT EXISTS all_data_datasource_idx ON externaldata.all_data (datasource_id);
 
 -- View for all streets
 CREATE MATERIALIZED VIEW IF NOT EXISTS externaldata.street_data AS
