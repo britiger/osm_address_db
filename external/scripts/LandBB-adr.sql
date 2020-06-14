@@ -1,7 +1,7 @@
 -- ID: 2 - Land Brandenburg - OSM-Id Relation 62504
 
 -- Metadata
-INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link, hasstreet, hassaddress, hassuburb) 
+INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license, link, hasstreet, hasaddress, hassuburb) 
     VALUES (2,
         'Adressverzeichnis Brandenburg',
         'Verzeichnis aller Adressen in Brandenburg',
