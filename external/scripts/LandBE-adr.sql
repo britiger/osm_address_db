@@ -12,7 +12,7 @@ INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license,
         true)
     ON CONFLICT DO NOTHING;
 INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) 
-    VALUES (4, -62442) 
+    VALUES (4, -62422) 
     ON CONFLICT DO NOTHING;
 
 -- Copy Data from import to all_data
