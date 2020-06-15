@@ -5,7 +5,7 @@ This collection of scripts is for importing osm data to a postgre database for a
 
 Requirements
 ============
-For using the following scripts you need a postgresql database version 10 or above including a suitable postgis extension. You can create a databse using the prepared SQL script located at sql/create_db.sql.
+For using the following scripts you need a postgresql database version 12 or above including a suitable postgis extension. You can create a databse using the prepared SQL script located at sql/create_db.sql.
 You also need the current imposm3 (>=0.4.0) for importing the data, for more informiation see tools/.
 
 Before starting the import you need to copy the file config.sample into config. You have to create an empty database with postgis extension enabled. In the config file you have to set the database parameter and the source file of the osm pbf file. If you want to update the database in the future without a complete reimport you have to set the url and sequence of the diff files.

@@ -69,24 +69,38 @@ CREATE TABLE import.osm_addresses
   "source:addr:street" bigint,
   geometry geometry,
   uptodate boolean DEFAULT FALSE
-) PARTITION BY RANGE (osm_id);
+) PARTITION BY HASH (osm_id);
 
--- Split into 9 Partitions
+-- Split into 16 Partitions
 CREATE TABLE import.osm_addresses_00 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (MINVALUE)   TO  (150000000);
+  FOR VALUES WITH (modulus 16, remainder 0);
 CREATE TABLE import.osm_addresses_01 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (150000001)  TO  (250000000);
+  FOR VALUES WITH (modulus 16, remainder 1);
 CREATE TABLE import.osm_addresses_02 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (250000001)  TO  (350000000);
+  FOR VALUES WITH (modulus 16, remainder 2);
 CREATE TABLE import.osm_addresses_03 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (350000001)  TO (1000000000);
+  FOR VALUES WITH (modulus 16, remainder 3);
 CREATE TABLE import.osm_addresses_04 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (1000000001) TO (2000000000);
+  FOR VALUES WITH (modulus 16, remainder 4);
 CREATE TABLE import.osm_addresses_05 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (2000000001) TO (3000000000);
+  FOR VALUES WITH (modulus 16, remainder 5);
 CREATE TABLE import.osm_addresses_06 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (3000000001) TO (4000000000);
+  FOR VALUES WITH (modulus 16, remainder 6);
 CREATE TABLE import.osm_addresses_07 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (4000000001) TO (5000000000);
+  FOR VALUES WITH (modulus 16, remainder 7);
 CREATE TABLE import.osm_addresses_08 PARTITION OF import.osm_addresses
-  FOR VALUES FROM (5000000001) TO (MAXVALUE);
+  FOR VALUES WITH (modulus 16, remainder 8);
+CREATE TABLE import.osm_addresses_09 PARTITION OF import.osm_addresses
+  FOR VALUES WITH (modulus 16, remainder 9);
+CREATE TABLE import.osm_addresses_10 PARTITION OF import.osm_addresses
+  FOR VALUES WITH (modulus 16, remainder 10);
+CREATE TABLE import.osm_addresses_11 PARTITION OF import.osm_addresses
+  FOR VALUES WITH (modulus 16, remainder 11);
+CREATE TABLE import.osm_addresses_12 PARTITION OF import.osm_addresses
+  FOR VALUES WITH (modulus 16, remainder 12);
+CREATE TABLE import.osm_addresses_13 PARTITION OF import.osm_addresses
+  FOR VALUES WITH (modulus 16, remainder 13);
+CREATE TABLE import.osm_addresses_14 PARTITION OF import.osm_addresses
+  FOR VALUES WITH (modulus 16, remainder 14);
+CREATE TABLE import.osm_addresses_15 PARTITION OF import.osm_addresses
+  FOR VALUES WITH (modulus 16, remainder 15);

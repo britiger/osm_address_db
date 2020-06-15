@@ -14,7 +14,7 @@ export PGDATABASE=$database
 logfile_name=update_`date '+%Y-%m-%d_%H-%M-%S'`_$1.log
 
 # Maximum number of partiton using in table osm_addresses
-partition_count=8
+partition_count=15
 
 # Check already running
 if [ "$(pidof -x $(basename $0))" != $$ ]
