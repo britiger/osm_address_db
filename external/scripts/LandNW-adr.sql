@@ -27,13 +27,13 @@ SELECT 5 AS datasource_id,
                             'strassenname', stn,
                             'hnr', hnr,
                             'adz', adz,
-                            'hnradz', hnr||adz,
+                            'hnradz', concat(hnr,adz),
                             'datum', datum
                         ) as all_data, 
         'DE' AS "addr:country",
         schl.name AS "addr:city",
         stn AS "addr:street",
-        hnr||adz AS "addr:housenumber",
+        concat(hnr,adz) AS "addr:housenumber",
         true AS is_valid
 FROM externaldata.landnw_adr adr
     INNER JOIN externaldata.landnw_adr_schl schl

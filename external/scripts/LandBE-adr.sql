@@ -43,7 +43,7 @@ SELECT 4 AS datasource_id,
         'Berlin' AS "addr:city",
         NULLIF(ort_name,'') AS "addr:suburb",
         str_name AS "addr:street",
-        hnr||hnr_zusatz AS "addr:housenumber",
+        concat(hnr, hnr_zusatz) AS "addr:housenumber",
         true AS is_valid
 FROM externaldata.landbe_adr;
 
