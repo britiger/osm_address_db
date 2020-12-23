@@ -45,7 +45,12 @@
                     "village",
                     "hamlet",
                     "suburb",
-                    "locality"
+                    "quarter",
+                    "neighbourhood",
+                    "isolated_dwelling",
+                    "farm",
+                    "locality",
+                    "allotments"
                 ]
             },
             "filter": {
@@ -146,6 +151,11 @@
                     "key": "de:amtlicher_gemeindeschluessel"
                 },
                 {
+                    "type": "string",
+                    "name": "de:regionalschluessel",
+                    "key": "de:regionalschluessel"
+                },
+                {
                     "type": "mapping_value",
                     "name": "boundary",
                     "key": null
@@ -236,6 +246,11 @@
                     "type": "string",
                     "name": "addr:suburb",
                     "key": "addr:suburb"
+                },
+                {
+                    "type": "string",
+                    "name": "de:strassenschluessel",
+                    "key": "de:strassenschluessel"
                 }
             ],
             "type": "geometry",

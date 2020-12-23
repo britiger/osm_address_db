@@ -13,6 +13,7 @@ CREATE TABLE import.osm_admin
   admin_level integer,
   "ISO3166-1" text,
   "de:amtlicher_gemeindeschluessel" text,
+  "de:regionalschluessel" text,
   geometry geometry
 );
 
@@ -43,6 +44,7 @@ CREATE TABLE import.osm_roads
   highway text,
   postal_code text,
   "addr:suburb" text,
+  "de:strassenschluessel" text,
   geometry geometry
 );
 

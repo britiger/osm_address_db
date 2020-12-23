@@ -74,6 +74,7 @@ AS SELECT
 road.name AS road_name, 
 city.osm_id AS city_osm_id, 
 "addr:suburb" as suburb,
+string_agg(DISTINCT "de:strassenschluessel", ',') as strassenschluessel,
 string_agg(road.osm_id::text, ',') as road_osm_ids,
 string_agg(DISTINCT road.postal_code::text, ',') as postal_code_tags,
 string_agg(DISTINCT road.highway::text, ',') as highway_tags,
@@ -98,7 +99,7 @@ FROM 	import.osm_places place,
 	(import.osm_admin_city AS city_list LEFT JOIN 
 	 import.osm_admin AS city ON city.osm_id=city_list.osm_id)
 WHERE st_within(place.geometry, city.geometry)
-  AND place.type IN ('village','hamlet','suburb','neighbourhood')
+  AND place.type IN ('village','hamlet','suburb','isolated_dwelling','neighbourhood','farm')
 GROUP BY place.name, city.osm_id;
 
 -- VIEW for finding errors (Distance between addresses)

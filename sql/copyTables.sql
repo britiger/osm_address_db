@@ -6,11 +6,11 @@ SET client_min_messages TO WARNING;
 -- osm_admin
 
 INSERT INTO import.osm_admin
-SELECT osm_id, name, admin_level, "ISO3166-1", "de:amtlicher_gemeindeschluessel", ST_Union(geometry) AS geometry
+SELECT osm_id, name, admin_level, "ISO3166-1", "de:amtlicher_gemeindeschluessel", "de:regionalschluessel", ST_Union(geometry) AS geometry
 FROM osm_admin
 WHERE ((admin_level = 2 AND "ISO3166-1" IS NOT NULL) OR admin_level>2)
 	AND osm_id IN (SELECT osm_id FROM update_admin WHERE update_type!='D')
-GROUP BY osm_id, name, admin_level, "ISO3166-1", "de:amtlicher_gemeindeschluessel";
+GROUP BY osm_id, name, admin_level, "ISO3166-1", "de:amtlicher_gemeindeschluessel", "de:regionalschluessel";
 
 -- osm_postcode
 INSERT INTO import.osm_postcode
@@ -28,7 +28,7 @@ GROUP BY osm_id, class, name, type, population;
 
 -- osm_roads
 INSERT INTO import.osm_roads
-SELECT osm_id, name, highway, postal_code, "addr:suburb", geometry
+SELECT osm_id, name, highway, postal_code, "addr:suburb", "de:strassenschluessel", geometry
 FROM osm_roads
 WHERE osm_id IN (SELECT osm_id FROM update_roads WHERE update_type!='D');
 UPDATE import.osm_roads SET geometry=ST_ExteriorRing(geometry) WHERE ST_geometrytype(geometry) = 'ST_Polygon';

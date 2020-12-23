@@ -5,7 +5,7 @@ SET client_min_messages TO WARNING;
 
 -- osm_admin
 CREATE OR REPLACE VIEW osm_admin AS
-	SELECT osm_id, name, admin_level::integer, NULLIF("ISO3166-1",'') AS "ISO3166-1", "de:amtlicher_gemeindeschluessel", geometry
+	SELECT osm_id, name, admin_level::integer, NULLIF("ISO3166-1",'') AS "ISO3166-1", "de:amtlicher_gemeindeschluessel", "de:regionalschluessel", geometry
 	FROM imposm_admin
 	WHERE admin_level IN('1','2','3','4','5','6','7','8','9','10','11','12','13')
 	  AND boundary='administrative'
@@ -57,7 +57,7 @@ CREATE OR REPLACE VIEW osm_associated AS
 
 -- osm_roads
 CREATE OR REPLACE VIEW osm_roads AS
-	SELECT osm_id, name, highway, NULLIF(postal_code,'') AS postal_code, NULLIF("addr:suburb",'') AS "addr:suburb", geometry
+	SELECT osm_id, name, highway, NULLIF(postal_code,'') AS postal_code, NULLIF("addr:suburb",'') AS "addr:suburb", NULLIF("de:strassenschluessel",'') as "de:strassenschluessel", geometry
 	FROM imposm_roads
 	WHERE name<>'' AND highway<>'' AND highway NOT IN('platform', 'bus_stop', 'proposed');
 
