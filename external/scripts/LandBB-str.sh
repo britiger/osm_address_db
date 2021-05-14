@@ -6,13 +6,13 @@
 # Import-Script for streets of Brandenburg, Germany
 # Source: https://geobroker.geobasis-bb.de/gbss.php?MODE=GetProductInformation&PRODUCTID=56f65bd3-ea75-40f9-afff-090a9fe3804f
 #         https://geobasis-bb.de/lgb/de/geodaten/liegenschaftskataster/strassennamen-regionaldaten/
-# put the file LandBB-str.txt in external/data/brandenburg
+# put the file 12-str.csv in external/data/brandenburg
 
 . ./basic.sh
 
-if [ ! -f ../data/brandenburg/LandBB-str.txt ]
+if [ ! -f ../data/brandenburg/12-str.csv ]
 then
-    echo_time "File LandBB-str.txt not found."
+    echo_time "File 12-str.csv not found."
     exit 1
 fi
 
