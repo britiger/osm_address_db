@@ -12,7 +12,6 @@ INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license,
 INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) 
     VALUES (1, -62504) 
     ON CONFLICT DO NOTHING;
-UPDATE externaldata.datasource SET sourcedate=NOW() WHERE id=1;
 
 -- copy data into all_data
 INSERT INTO externaldata.all_data
@@ -57,9 +56,15 @@ WHERE datasource_id=1
   AND all_data ->> 'strschl' NOT LIKE 'L%'  -- Landesstraße
   AND all_data ->> 'strschl' NOT LIKE 'B%'  -- Bundestraße
   AND all_data ->> 'strschl' NOT LIKE 'A%'  -- Autobahn
+  AND all_data ->> 'strschl' NOT LIKE 'F%'  -- Forststraßen
   AND all_data ->> 'strschl' NOT LIKE '%9999'  -- Germarkungen/Sonstiges
   AND char_length(all_data->>'strschl') <= 5 -- long strschl are waterways 
   ;
+
+-- set source date of dataset
+UPDATE externaldata.datasource 
+  SET sourcedate=NOW()
+WHERE id=1;
 
 -- Update Views
 REFRESH MATERIALIZED VIEW externaldata.street_data_city;

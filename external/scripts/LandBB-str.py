@@ -3,6 +3,7 @@
 
 import os
 import json
+import csv
 
 from sqlalchemy import create_engine, text
 
@@ -17,15 +18,15 @@ except:
 
 
 def add_street(val):
-    # header:  # SCHL # KATASTERBEHOERDE           # SCHL     # GEMEINDE                  # SCHL  # LAGEBEZEICHNUNG                         #
-    # data:    #  51  #  Brandenburg an der Havel  # 12051000 # Brandenburg an der Havel  # A0002 # A 2                                     #
+    # KREISSCHLUESSEL,KATASTERBEHOERDE,GEMEINDESCHLUESSEL,GEMEINDE,LAGESCHLUESSEL,LAGEBEZEICHNUNG
+    # 51,Brandenburg an der Havel,12051000,Brandenburg an der Havel,00005,Abtstraße
 
-    kreisschl = val[1].strip()
-    katasterbehoerde = val[2].strip()
-    gemeindeschl = val[3].strip()
-    gemeinde = val[4].strip()
-    strschl = val[5].strip()
-    bezeichnung = val[6].strip()
+    kreisschl = val[0].strip()
+    katasterbehoerde = val[1].strip()
+    gemeindeschl = val[2].strip()
+    gemeinde = val[3].strip()
+    strschl = val[4].strip()
+    bezeichnung = val[5].strip()
     json_data = {
         'kreisschl': kreisschl,
         'katasterbehoerde': katasterbehoerde,
@@ -42,18 +43,10 @@ def add_street(val):
 
 
 def parse_file():
-    f = open('../data/brandenburg/LandBB-str.txt', 'r', encoding='iso-8859-15')
-    for line in f:
-        splitted = line.split('#')
-        if len(splitted) == 8:
-            if splitted[1].strip().isnumeric():
-                add_street(splitted)
-            else:
-                # maybe the header
-                print('Skip line: ' + line)
-        else:
-            print('Skip line: ' + line)
-    f.close()
-
+    with open('../data/brandenburg/12-str.csv', 'r') as infile:
+        reader = csv.reader(infile)
+        next(reader, None) # Skip header
+        for r in reader:
+            add_street(r)
 
 parse_file()
