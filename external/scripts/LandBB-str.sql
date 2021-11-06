@@ -12,13 +12,25 @@ INSERT INTO externaldata.datasource (id, sourcename, sourcedescription, license,
 INSERT INTO externaldata.datasource_admin (datasource_id, admin_osm_id) 
     VALUES (1, -62504) 
     ON CONFLICT DO NOTHING;
+UPDATE externaldata.datasource SET sourcedate=NOW() WHERE id=1;
 
--- copy street and city from source
-UPDATE externaldata.all_data
-SET "addr:street" = all_data ->> 'bezeichnung',
-    "addr:city" = all_data ->> 'gemeinde',
-    "addr:country" = 'DE'
-WHERE datasource_id=1;
+-- copy data into all_data
+INSERT INTO externaldata.all_data
+    (datasource_id, all_data, "addr:country", "addr:city", "addr:street", is_valid)
+SELECT 1 AS datasource_id,
+        json_build_object(
+                            'kreisschl', kreisschl, 
+                            'katasterbehoerde', katasterbehoerde, 
+                            'gemeindeschl', gemeindeschl,
+                            'gemeinde', gemeinde,
+                            'strschl', strschl,
+                            'bezeichnung', bezeichnung
+                        ) as all_data, 
+        'DE' AS "addr:country",
+        gemeinde AS "addr:city",
+        bezeichnung AS "addr:street",
+        false AS is_valid
+FROM externaldata.landbb_str str;
 
 -- search admin boundary
 UPDATE externaldata.all_data 
